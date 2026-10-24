@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shreelearn.in | अभ्यास, ऑडिओ आणि टेस्ट सिरीज</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @keyframes pulse-wave {
+            0%, 100% { height: 6px; }
+            50% { height: 26px; }
+        }
+        .animate-wave-1 { animation: pulse-wave 0.8s infinite ease-in-out; }
+        .animate-wave-2 { animation: pulse-wave 0.6s infinite ease-in-out 0.2s; }
+        .animate-wave-3 { animation: pulse-wave 1s infinite ease-in-out 0.4s; }
+        .animate-wave-4 { animation: pulse-wave 0.7s infinite ease-in-out 0.1s; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen pb-32">
+
+    <!-- Navbar -->
+    <header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-40 px-4 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center font-bold text-xl shadow-lg">
+                <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+            <div>
+                <h1 class="text-lg font-bold text-white tracking-wide">Shreelearn<span class="text-indigo-400">.in</span></h1>
+                <p class="text-xs text-slate-400">पोलीस भरती • MPSC • तलाठी</p>
+            </div>
+        </div>
+        <button onclick="toggleLectureHall()" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-500 rounded-lg text-xs font-semibold flex items-center gap-2">
+            <i class="fa-solid fa-video"></i> लेक्चर हॉल
+        </button>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-6xl mx-auto p-4 grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <!-- Left: Subject Explorer -->
+        <aside class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-4">
+            <h2 class="text-sm font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
+                <i class="fa-solid fa-layer-group text-indigo-400"></i> विषय निवडा
+            </h2>
+
+            <div class="space-y-3">
+                <!-- Subject 1 -->
+                <div class="border border-slate-700 rounded-xl overflow-hidden bg-slate-900/50">
+                    <button onclick="toggleList('marathi-sub')" class="w-full text-left px-4 py-3 font-semibold text-sm flex justify-between items-center text-indigo-300">
+                        <span><i class="fa-solid fa-book mr-2"></i> मराठी व्याकरण</span>
+                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                    </button>
+                    <div id="marathi-sub" class="px-3 pb-2 space-y-1 text-xs text-slate-300">
+                        <div onclick="loadContent('samas')" class="p-2 rounded hover:bg-slate-800 cursor-pointer flex justify-between">
+                            <span>समास व प्रकार</span> <i class="fa-solid fa-volume-high text-indigo-400"></i>
+                        </div>
+                        <div onclick="loadContent('sandhi')" class="p-2 rounded hover:bg-slate-800 cursor-pointer flex justify-between">
+                            <span>संधी व प्रकार</span> <i class="fa-solid fa-volume-high text-indigo-400"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Subject 2 -->
+                <div class="border border-slate-700 rounded-xl overflow-hidden bg-slate-900/50">
+                    <button onclick="toggleList('gk-sub')" class="w-full text-left px-4 py-3 font-semibold text-sm flex justify-between items-center text-amber-300">
+                        <span><i class="fa-solid fa-landmark mr-2"></i> सामान्य ज्ञान (GK)</span>
+                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                    </button>
+                    <div id="gk-sub" class="px-3 pb-2 space-y-1 text-xs text-slate-300">
+                        <div onclick="loadContent('maharashtra_bhugol')" class="p-2 rounded hover:bg-slate-800 cursor-pointer flex justify-between">
+                            <span>महाराष्ट्र भूगोल</span> <i class="fa-solid fa-volume-high text-amber-400"></i>
+                        </div>
+                        <div onclick="loadContent('rajyaghatana')" class="p-2 rounded hover:bg-slate-800 cursor-pointer flex justify-between">
+                            <span>भारतीय राज्यघटना</span> <i class="fa-solid fa-volume-high text-amber-400"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Right: Study Material & Live Audio Display -->
+        <section class="md:col-span-2 space-y-4">
+            <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700">
+                <div class="flex items-center justify-between border-b border-slate-700 pb-4">
+                    <div>
+                        <span id="topic-tag" class="text-xs bg-indigo-900/50 text-indigo-400 px-2.5 py-1 rounded-md font-semibold">मराठी व्याकरण</span>
+                        <h2 id="topic-title" class="text-xl font-bold text-white mt-1">समास आणि त्याचे प्रकार</h2>
+                    </div>
+                    <button onclick="playAIAudio()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 rounded-xl font-medium text-xs flex items-center gap-2 shadow-lg shadow-indigo-600/30">
+                        <i class="fa-solid fa-headphones"></i> AI ऑडिओ ऐका
+                    </button>
+                </div>
+
+                <!-- Content Area -->
+                <div class="mt-4 text-slate-300 leading-relaxed text-sm space-y-3" id="material-content">
+                    <p class="font-medium text-indigo-200">दोन किंवा अधिक शब्द एकत्र येऊन जो एक नवीन जोडशब्द तयार होतो, त्याला समास म्हणतात.</p>
+                    <ul class="list-disc list-inside space-y-2 text-slate-300">
+                        <li><strong>अव्ययीभाव समास:</strong> पहिले पद मुख्य असते (उदा. यथाशक्ती, प्रतिदिन).</li>
+                        <li><strong>तत्पुरुष समास:</strong> दुसरे पद मुख्य असते (उदा. राजपुत्र, सुखप्राप्त).</li>
+                        <li><strong>द्वंद्व समास:</strong> दोन्ही पदे महत्त्वाची असतात (उदा. रामलक्ष्मण, भाजीपाला).</li>
+                        <li><strong>बहुव्रीही समास:</strong> दोन्ही पदांवरून तिसऱ्याच पदाचा बोध होतो (उदा. गजानन, नीलकंठ).</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Floating AI Voice Player -->
+    <div class="fixed bottom-3 inset-x-4 max-w-4xl mx-auto bg-slate-800/95 backdrop-blur border border-slate-700 p-4 rounded-2xl shadow-2xl flex items-center justify-between z-50">
+        <div class="flex items-center gap-3">
+            <button onclick="toggleAudio()" id="play-pause-btn" class="w-12 h-12 bg-indigo-600 hover:bg-indigo-500 rounded-xl flex items-center justify-center text-white text-lg">
+                <i class="fa-solid fa-play" id="play-icon"></i>
+            </button>
+            <div>
+                <p id="player-title" class="text-xs font-bold text-white">समास आणि त्याचे प्रकार</p>
+                <p id="player-status" class="text-[11px] text-slate-400">AI वाचन तयार आहे</p>
+            </div>
+        </div>
+
+        <!-- Waveform Simulation -->
+        <div class="hidden sm:flex items-center gap-1.5 h-8">
+            <span class="w-1 bg-indigo-400 rounded-full animate-wave-1"></span>
+            <span class="w-1 bg-indigo-400 rounded-full animate-wave-2"></span>
+            <span class="w-1 bg-indigo-400 rounded-full animate-wave-3"></span>
+            <span class="w-1 bg-indigo-400 rounded-full animate-wave-4"></span>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <button onclick="setSpeed(1)" class="px-2 py-1 text-xs bg-slate-700 hover:bg-slate-600 rounded">1x</button>
+            <button onclick="setSpeed(1.25)" class="px-2 py-1 text-xs bg-slate-700 hover:bg-slate-600 rounded">1.25x</button>
+        </div>
+    </div>
+
+    <script>
+        let isSpeaking = false;
+        let currentUtterance = null;
+        let speechRate = 1.0;
+
+        function toggleList(id) {
+            const el = document.getElementById(id);
+            el.classList.toggle('hidden');
+        }
+
+        function playAIAudio() {
+            window.speechSynthesis.cancel();
+            const text = document.getElementById('material-content').innerText;
+            currentUtterance = new SpeechSynthesisUtterance(text);
+            currentUtterance.rate = speechRate;
+            currentUtterance.lang = 'mr-IN'; // Marathi Voice
+
+            currentUtterance.onstart = () => {
+                isSpeaking = true;
+                document.getElementById('play-icon').classList.replace('fa-play', 'fa-pause');
+                document.getElementById('player-status').innerText = "AI वाचन सुरू आहे...";
+            };
+
+            currentUtterance.onend = () => {
+                isSpeaking = false;
+                document.getElementById('play-icon').classList.replace('fa-pause', 'fa-play');
+                document.getElementById('player-status').innerText = "वाचन पूर्ण झाले";
+            };
+
+            window.speechSynthesis.speak(currentUtterance);
+        }
+
+        function toggleAudio() {
+            if (isSpeaking) {
+                window.speechSynthesis.pause();
+                isSpeaking = false;
+                document.getElementById('play-icon').classList.replace('fa-pause', 'fa-play');
+            } else {
+                if (window.speechSynthesis.paused) {
+                    window.speechSynthesis.resume();
+                    isSpeaking = true;
+                    document.getElementById('play-icon').classList.replace('fa-play', 'fa-pause');
+                } else {
+                    playAIAudio();
+                }
+            }
+        }
+
+        function setSpeed(rate) {
+            speechRate = rate;
+            if (isSpeaking) playAIAudio();
+        }
+
+        function loadContent(topic) {
+            const titleEl = document.getElementById('topic-title');
+            const contentEl = document.getElementById('material-content');
+            if (topic === 'sandhi') {
+                titleEl.innerText = "संधी व त्याचे प्रकार";
+                contentEl.innerHTML = "<p>जवळजवळ आलेले दोन स्वर किंवा व्यंजने एकत्र जोडण्याच्या प्रक्रियेला संधी म्हणतात.</p><ul class='list-disc list-inside mt-2'><li>स्वर संधी (उदा. देवालय)</li><li>व्यंजन संधी (उदा. सज्जन)</li><li>विसर्ग संधी (उदा. निष्पाप)</li></ul>";
+            } else if (topic === 'maharashtra_bhugol') {
+                titleEl.innerText = "महाराष्ट्र भूगोल - स्थान व विस्तार";
+                contentEl.innerHTML = "<p>महाराष्ट्र हे भारताच्या पश्चिम भागात स्थित असलेले राज्य आहे.</p><ul class='list-disc list-inside mt-2'><li>राज्याची स्थापना: १ मे १९६०</li><li>राजधानी: मुंबई, उपराजधानी: नागपूर</li><li>एकूण जिल्हे: ३६, प्रशासकीय विभाग: ६</li></ul>";
+            }
+            document.getElementById('player-title').innerText = titleEl.innerText;
+        }
+
+        function toggleLectureHall() {
+            alert("डिजिटल लेक्चर हॉल लवकरच सुरू होत आहे!");
+        }
+    </script>
+</body>
+                      </html>
+                      
