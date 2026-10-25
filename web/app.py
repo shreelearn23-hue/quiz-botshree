@@ -38,12 +38,31 @@ def get_subjects():
 def exam_portal():
     return render_template('exam.html')
 
+# --- Quiz Files ki list lene ke liye Route ---
+@app.route('/api/list-quizzes')
+def list_quizzes():
+    api_url = "https://api.github.com/repos/shreelearn23-hue/Quiz-bot/git/trees/main?recursive=1"
+    try:
+        req = urllib.request.Request(api_url, headers={'User-Agent': 'Mozilla/5.0'})
+        with urllib.request.urlopen(req) as resp:
+            tree_data = json.loads(resp.read().decode())
+            files = [
+                item['path'].replace('Quiz/', '') 
+                for item in tree_data.get('tree', []) 
+                if item['path'].startswith('Quiz/') and item['path'].endswith('.json')
+            ]
+            return jsonify({"files": files})
+    except Exception as e:
+        return jsonify({"files": [], "error": str(e)})
+
 # --- Telegram Bot ki JSON file fetch karne ka API Route ---
 @app.route('/api/get-quiz')
 def get_quiz():
-    file_path = request.args.get('path', 'sample.json')
+    file_path = request.args.get('path', '')
+    if not file_path:
+        return jsonify({"error": "No file path provided"}), 400
+        
     raw_url = f"https://raw.githubusercontent.com/shreelearn23-hue/Quiz-bot/main/Quiz/{file_path}"
-
     try:
         req = urllib.request.Request(raw_url, headers={'User-Agent': 'Mozilla/5.0'})
         with urllib.request.urlopen(req) as response:
