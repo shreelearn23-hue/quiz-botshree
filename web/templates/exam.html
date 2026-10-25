@@ -140,33 +140,28 @@
         async function fetchAvailableQuizzes() {
             const dropdown = document.getElementById('quiz-dropdown');
             try {
-                const res = await fetch('https://api.github.com/repos/shreelearn23-hue/Quiz-bot/git/trees/main?recursive=1');
-                const data = await res.json();
-                
-                dropdown.innerHTML = '';
-                const quizFiles = (data.tree || []).filter(item => item.path.startsWith('Quiz/') && item.path.endsWith('.json'));
+                const res = await fetch('/api/list-quizzes');
+                const result = await res.json();
+                const files = result.files || [];
 
-                if (quizFiles.length === 0) {
-                    dropdown.innerHTML = '<option value="sample.json">Sample Test</option>';
-                    loadQuizData('sample.json');
+                dropdown.innerHTML = '';
+                if (files.length === 0) {
+                    dropdown.innerHTML = '<option value="">कोणतीही चाचणी सापडली नाही</option>';
                     return;
                 }
 
-                quizFiles.forEach(file => {
-                    const relativePath = file.path.replace('Quiz/', '');
+                files.forEach(file => {
                     const opt = document.createElement('option');
-                    opt.value = relativePath;
-                    opt.textContent = relativePath.replace('.json', '').replace(/\//g, ' ➔ ');
+                    opt.value = file;
+                    opt.textContent = file.replace('.json', '').replace(/\//g, ' ➔ ');
                     dropdown.appendChild(opt);
                 });
 
-                // Load first available test
-                loadQuizData(quizFiles[0].path.replace('Quiz/', ''));
+                // Pehli test file auto load karein
+                loadQuizData(files[0]);
 
             } catch (err) {
                 console.error("List fetch error:", err);
-                dropdown.innerHTML = '<option value="sample.json">Default Test</option>';
-                loadQuizData('sample.json');
             }
         }
 
