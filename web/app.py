@@ -1,5 +1,6 @@
 import os
 import json
+import urllib.request
 from flask import Flask, render_template, jsonify, request
 
 app = Flask(__name__)
@@ -32,6 +33,24 @@ def get_subjects():
     }
     return jsonify(subjects_structure)
 
+# --- TCS Exam Portal Page Route ---
+@app.route('/exam')
+def exam_portal():
+    return render_template('exam.html')
+
+# --- Telegram Bot ki JSON file fetch karne ka API Route ---
+@app.route('/api/get-quiz')
+def get_quiz():
+    file_path = request.args.get('path', 'sample.json')
+    raw_url = f"https://raw.githubusercontent.com/shreelearn23-hue/Quiz-bot/main/Quiz/{file_path}"
+
+    try:
+        req = urllib.request.Request(raw_url, headers={'User-Agent': 'Mozilla/5.0'})
+        with urllib.request.urlopen(req) as response:
+            data = json.loads(response.read().decode())
+            return jsonify(data)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
-                       
