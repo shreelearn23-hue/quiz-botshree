@@ -150,21 +150,38 @@
                     return;
                 }
 
-                files.forEach(file => {
-                    const opt = document.createElement('option');
-                    opt.value = file;
-                    opt.textContent = file.replace('.json', '').replace(/\//g, ' ➔ ');
-                    dropdown.appendChild(opt);
+                // Folders ke according grouping
+                const groups = {};
+                files.forEach(item => {
+                    if (!groups[item.folder]) groups[item.folder] = [];
+                    groups[item.folder].push(item);
                 });
 
-                // Pehli test file auto load karein
-                loadQuizData(files[0]);
+                Object.keys(groups).forEach(folder => {
+                    const optgroup = document.createElement('optgroup');
+                    optgroup.label = `📁 ${folder.replace('_', ' ')}`;
+                    
+                    groups[folder].forEach(q => {
+                        const opt = document.createElement('option');
+                        opt.value = q.path;
+                        
+                        // NEW Badge + FREE/PAID Badge
+                        const newBadge = q.is_new ? '🔥 [NEW] ' : '';
+                        const accessBadge = q.is_paid ? '🔒 [PAID] ' : '🟢 [FREE] ';
+                        
+                        opt.textContent = `${newBadge}${accessBadge}${q.title}`;
+                        optgroup.appendChild(opt);
+                    });
+                    dropdown.appendChild(optgroup);
+                });
+
+                // Pehla test auto load karein
+                loadQuizData(files[0].path);
 
             } catch (err) {
                 console.error("List fetch error:", err);
             }
         }
-
         async function loadQuizData(path) {
             try {
                 const res = await fetch(`/api/get-quiz?path=${encodeURIComponent(path)}`);
