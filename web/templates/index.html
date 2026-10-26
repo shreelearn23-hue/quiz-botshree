@@ -3,206 +3,233 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="google-site-verification" content="_PnDhgHRyn3Z2sWKcaqJM0KusmXV6ASIFesjuuSu3dQ" />
-    <title>Shreelearn.in | अभ्यास, ऑडिओ आणि टेस्ट सिरीज</title>
+    <title>श्री लर्न (ShreeLearn) - महाराष्ट्र स्पर्धा परीक्षा ऑनलाइन सराव व कौशल्य मंच</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        @keyframes pulse-wave {
-            0%, 100% { height: 6px; }
-            50% { height: 26px; }
+        .tricolor-bar {
+            background: linear-gradient(90deg, #ff9933 33.33%, #ffffff 33.33%, #ffffff 66.66%, #138808 66.66%);
+            height: 3px;
         }
-        .animate-wave-1 { animation: pulse-wave 0.8s infinite ease-in-out; }
-        .animate-wave-2 { animation: pulse-wave 0.6s infinite ease-in-out 0.2s; }
-        .animate-wave-3 { animation: pulse-wave 1s infinite ease-in-out 0.4s; }
-        .animate-wave-4 { animation: pulse-wave 0.7s infinite ease-in-out 0.1s; }
+        .portal-bg {
+            background: linear-gradient(135deg, #0b1329 0%, #172554 60%, #1e1b4b 100%);
+        }
+        .card-elevate {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card-elevate:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 14px 25px -8px rgba(15, 23, 42, 0.12);
+        }
     </style>
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen pb-32">
+<body class="bg-slate-50 text-slate-800 font-sans flex flex-col min-h-screen">
 
-    <!-- Navbar -->
-    <header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-40 px-4 py-3 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center font-bold text-xl shadow-lg">
-                <i class="fa-solid fa-graduation-cap"></i>
-            </div>
-            <div>
-                <h1 class="text-lg font-bold text-white tracking-wide">Shreelearn<span class="text-indigo-400">.in</span></h1>
-                <p class="text-xs text-slate-400">पोलीस भरती • MPSC • तलाठी</p>
-            </div>
-        </div>
-        <button onclick="toggleLectureHall()" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-500 rounded-lg text-xs font-semibold flex items-center gap-2">
-            <i class="fa-solid fa-video"></i> लेक्चर हॉल
-        </button>
-    </header>
+    <!-- Top Tricolor Ribbon -->
+    <div class="tricolor-bar"></div>
 
-    <!-- Main Container -->
-    <main class="max-w-6xl mx-auto p-4 grid grid-cols-1 md:grid-cols-3 gap-6">
-
-        <!-- Left: Subject Explorer -->
-        <aside class="bg-slate-800 p-4 rounded-2xl border border-slate-700 space-y-4">
-            <h2 class="text-sm font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
-                <i class="fa-solid fa-layer-group text-indigo-400"></i> विषय निवडा
-            </h2>
-
-            <div class="space-y-3">
-                <!-- Subject 1 -->
-                <div class="border border-slate-700 rounded-xl overflow-hidden bg-slate-900/50">
-                    <button onclick="toggleList('marathi-sub')" class="w-full text-left px-4 py-3 font-semibold text-sm flex justify-between items-center text-indigo-300">
-                        <span><i class="fa-solid fa-book mr-2"></i> मराठी व्याकरण</span>
-                        <i class="fa-solid fa-chevron-down text-xs"></i>
-                    </button>
-                    <div id="marathi-sub" class="px-3 pb-2 space-y-1 text-xs text-slate-300">
-                        <div onclick="loadContent('samas')" class="p-2 rounded hover:bg-slate-800 cursor-pointer flex justify-between">
-                            <span>समास व प्रकार</span> <i class="fa-solid fa-volume-high text-indigo-400"></i>
-                        </div>
-                        <div onclick="loadContent('sandhi')" class="p-2 rounded hover:bg-slate-800 cursor-pointer flex justify-between">
-                            <span>संधी व प्रकार</span> <i class="fa-solid fa-volume-high text-indigo-400"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Subject 2 -->
-                <div class="border border-slate-700 rounded-xl overflow-hidden bg-slate-900/50">
-                    <button onclick="toggleList('gk-sub')" class="w-full text-left px-4 py-3 font-semibold text-sm flex justify-between items-center text-amber-300">
-                        <span><i class="fa-solid fa-landmark mr-2"></i> सामान्य ज्ञान (GK)</span>
-                        <i class="fa-solid fa-chevron-down text-xs"></i>
-                    </button>
-                    <div id="gk-sub" class="px-3 pb-2 space-y-1 text-xs text-slate-300">
-                        <div onclick="loadContent('maharashtra_bhugol')" class="p-2 rounded hover:bg-slate-800 cursor-pointer flex justify-between">
-                            <span>महाराष्ट्र भूगोल</span> <i class="fa-solid fa-volume-high text-amber-400"></i>
-                        </div>
-                        <div onclick="loadContent('rajyaghatana')" class="p-2 rounded hover:bg-slate-800 cursor-pointer flex justify-between">
-                            <span>भारतीय राज्यघटना</span> <i class="fa-solid fa-volume-high text-amber-400"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </aside>
-
-        <!-- Right: Study Material & Live Audio Display -->
-        <section class="md:col-span-2 space-y-4">
-            <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700">
-                <div class="flex items-center justify-between border-b border-slate-700 pb-4">
-                    <div>
-                        <span id="topic-tag" class="text-xs bg-indigo-900/50 text-indigo-400 px-2.5 py-1 rounded-md font-semibold">मराठी व्याकरण</span>
-                        <h2 id="topic-title" class="text-xl font-bold text-white mt-1">समास आणि त्याचे प्रकार</h2>
-                    </div>
-                    <button onclick="playAIAudio()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 rounded-xl font-medium text-xs flex items-center gap-2 shadow-lg shadow-indigo-600/30">
-                        <i class="fa-solid fa-headphones"></i> AI ऑडिओ ऐका
-                    </button>
-                </div>
-
-                <!-- Content Area -->
-                <div class="mt-4 text-slate-300 leading-relaxed text-sm space-y-3" id="material-content">
-                    <p class="font-medium text-indigo-200">दोन किंवा अधिक शब्द एकत्र येऊन जो एक नवीन जोडशब्द तयार होतो, त्याला समास म्हणतात.</p>
-                    <ul class="list-disc list-inside space-y-2 text-slate-300">
-                        <li><strong>अव्ययीभाव समास:</strong> पहिले पद मुख्य असते (उदा. यथाशक्ती, प्रतिदिन).</li>
-                        <li><strong>तत्पुरुष समास:</strong> दुसरे पद मुख्य असते (उदा. राजपुत्र, सुखप्राप्त).</li>
-                        <li><strong>द्वंद्व समास:</strong> दोन्ही पदे महत्त्वाची असतात (उदा. रामलक्ष्मण, भाजीपाला).</li>
-                        <li><strong>बहुव्रीही समास:</strong> दोन्ही पदांवरून तिसऱ्याच पदाचा बोध होतो (उदा. गजानन, नीलकंठ).</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Floating AI Voice Player -->
-    <div class="fixed bottom-3 inset-x-4 max-w-4xl mx-auto bg-slate-800/95 backdrop-blur border border-slate-700 p-4 rounded-2xl shadow-2xl flex items-center justify-between z-50">
-        <div class="flex items-center gap-3">
-            <button onclick="toggleAudio()" id="play-pause-btn" class="w-12 h-12 bg-indigo-600 hover:bg-indigo-500 rounded-xl flex items-center justify-center text-white text-lg">
-                <i class="fa-solid fa-play" id="play-icon"></i>
-            </button>
-            <div>
-                <p id="player-title" class="text-xs font-bold text-white">समास आणि त्याचे प्रकार</p>
-                <p id="player-status" class="text-[11px] text-slate-400">AI वाचन तयार आहे</p>
-            </div>
-        </div>
-
-        <!-- Waveform Simulation -->
-        <div class="hidden sm:flex items-center gap-1.5 h-8">
-            <span class="w-1 bg-indigo-400 rounded-full animate-wave-1"></span>
-            <span class="w-1 bg-indigo-400 rounded-full animate-wave-2"></span>
-            <span class="w-1 bg-indigo-400 rounded-full animate-wave-3"></span>
-            <span class="w-1 bg-indigo-400 rounded-full animate-wave-4"></span>
-        </div>
-
+    <!-- Top Notification Bar -->
+    <div class="bg-slate-900 text-slate-300 text-[11px] px-4 py-2 flex items-center justify-between border-b border-slate-800">
         <div class="flex items-center gap-2">
-            <button onclick="setSpeed(1)" class="px-2 py-1 text-xs bg-slate-700 hover:bg-slate-600 rounded">1x</button>
-            <button onclick="setSpeed(1.25)" class="px-2 py-1 text-xs bg-slate-700 hover:bg-slate-600 rounded">1.25x</button>
+            <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="font-medium">महाराष्ट्र स्पर्धा परीक्षा डिजिटल ऑनलाइन सराव व्यासपीठ</span>
+        </div>
+        <div class="hidden sm:flex items-center gap-4 text-slate-400">
+            <span><i class="fa-solid fa-check-circle text-emerald-400 mr-1"></i> १००% मोफत व जाहिरात मुक्त</span>
+            <span><i class="fa-solid fa-bolt text-amber-400 mr-1"></i> टीसीएस / आयबीपीएस सराव पद्धत</span>
         </div>
     </div>
 
-    <script>
-        let isSpeaking = false;
-        let currentUtterance = null;
-        let speechRate = 1.0;
+    <!-- Header Navigation -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <a href="/" class="flex items-center gap-2.5">
+                <div class="w-10 h-10 rounded-xl bg-indigo-700 text-white flex items-center justify-center font-black text-xl shadow-md border-2 border-indigo-500">
+                    श्री
+                </div>
+                <div>
+                    <div class="text-lg md:text-xl font-black text-slate-900 tracking-tight leading-tight flex items-center gap-1.5">
+                        श्री लर्न
+                        <span class="bg-indigo-100 text-indigo-700 text-[10px] font-bold px-1.5 py-0.5 rounded">CBT सराव</span>
+                    </div>
+                    <div class="text-[10px] text-slate-500 font-medium">स्पर्धा परीक्षा कौशल्य विकास मंच</div>
+                </div>
+            </a>
 
-        function toggleList(id) {
-            const el = document.getElementById(id);
-            el.classList.toggle('hidden');
-        }
+            <!-- Quick Action Button -->
+            <a href="/exam" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs md:text-sm font-bold px-4 py-2 rounded-lg shadow-sm transition flex items-center gap-2">
+                <i class="fa-solid fa-play text-[11px]"></i>
+                <span>सराव चाचणी सुरू करा</span>
+            </a>
+        </div>
+    </header>
 
-        function playAIAudio() {
-            window.speechSynthesis.cancel();
-            const text = document.getElementById('material-content').innerText;
-            currentUtterance = new SpeechSynthesisUtterance(text);
-            currentUtterance.rate = speechRate;
-            currentUtterance.lang = 'mr-IN'; // Marathi Voice
+    <!-- Hero Section (Skill India Style Card Grid & Clean Look) -->
+    <section class="portal-bg text-white py-12 md:py-16 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <span class="bg-indigo-500/20 text-indigo-200 border border-indigo-400/30 text-xs px-3.5 py-1.5 rounded-full font-semibold inline-block mb-4">
+                विद्यार्थी केंद्रित • पूर्णपणे जाहिरात मुक्त व सुरक्षित
+            </span>
+            <h1 class="text-2xl md:text-4xl font-extrabold tracking-tight leading-snug">
+                महाराष्ट्रातील स्पर्धा परीक्षांसाठी<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-200 to-indigo-200">
+                    अत्याधुनिक ऑनलाइन कॉम्प्युटर बेस्ड टेस्ट (CBT) मंच
+                </span>
+            </h1>
+            <p class="text-xs md:text-sm text-slate-300 max-w-2xl mx-auto mt-3 leading-relaxed">
+                पोलीस भरती, तलाठी, गट-क व इतर सर्व राज्यस्तरीय परीक्षांसाठी अचूक प्रश्नांचा सराव, ६० सेकंदांचा टायमर आणि त्वरित गुणवत्ता निकाल विश्लेषण.
+            </p>
 
-            currentUtterance.onstart = () => {
-                isSpeaking = true;
-                document.getElementById('play-icon').classList.replace('fa-play', 'fa-pause');
-                document.getElementById('player-status').innerText = "AI वाचन सुरू आहे...";
-            };
+            <div class="mt-8 flex flex-wrap justify-center gap-3">
+                <a href="/exam" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-6 py-3 rounded-xl shadow-lg transition text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-laptop-code"></i> थेट सराव परीक्षा दालनात जा
+                </a>
+            </div>
+        </div>
+    </section>
 
-            currentUtterance.onend = () => {
-                isSpeaking = false;
-                document.getElementById('play-icon').classList.replace('fa-pause', 'fa-play');
-                document.getElementById('player-status').innerText = "वाचन पूर्ण झाले";
-            };
+    <!-- Key Stats Counter -->
+    <section class="max-w-5xl mx-auto px-4 -mt-7 relative z-20">
+        <div class="bg-white rounded-2xl shadow-md border border-slate-200 grid grid-cols-2 sm:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-slate-100 p-4">
+            <div class="text-center py-2">
+                <div class="text-xl md:text-2xl font-black text-indigo-700">१००+</div>
+                <div class="text-[11px] font-bold text-slate-500 mt-0.5">सराव प्रश्नपत्रिका</div>
+            </div>
+            <div class="text-center py-2">
+                <div class="text-xl md:text-2xl font-black text-emerald-600">६० से.</div>
+                <div class="text-[11px] font-bold text-slate-500 mt-0.5">प्रति प्रश्न वेळ</div>
+            </div>
+            <div class="text-center py-2">
+                <div class="text-xl md:text-2xl font-black text-amber-500">त्वरित</div>
+                <div class="text-[11px] font-bold text-slate-500 mt-0.5">गुणवत्ता निकाल</div>
+            </div>
+            <div class="text-center py-2">
+                <div class="text-xl md:text-2xl font-black text-sky-600">०%</div>
+                <div class="text-[11px] font-bold text-slate-500 mt-0.5">कोणतीही जाहिरात नाही</div>
+            </div>
+        </div>
+    </section>
 
-            window.speechSynthesis.speak(currentUtterance);
-        }
+    <!-- Exam Subject Cards (All Marathi) -->
+    <main class="max-w-6xl mx-auto px-4 py-12 flex-1">
+        <div class="text-center mb-10">
+            <h2 class="text-xl md:text-2xl font-black text-slate-800 tracking-tight">अभ्यासक्रम व सराव चाचण्या</h2>
+            <p class="text-xs md:text-sm text-slate-500 mt-1">आपल्या आवडीचा विषय निवडून सराव सुरू करा</p>
+        </div>
 
-        function toggleAudio() {
-            if (isSpeaking) {
-                window.speechSynthesis.pause();
-                isSpeaking = false;
-                document.getElementById('play-icon').classList.replace('fa-pause', 'fa-play');
-            } else {
-                if (window.speechSynthesis.paused) {
-                    window.speechSynthesis.resume();
-                    isSpeaking = true;
-                    document.getElementById('play-icon').classList.replace('fa-play', 'fa-pause');
-                } else {
-                    playAIAudio();
-                }
-            }
-        }
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-        function setSpeed(rate) {
-            speechRate = rate;
-            if (isSpeaking) playAIAudio();
-        }
+            <!-- Card 1: Police Bharti -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm card-elevate flex flex-col justify-between">
+                <div>
+                    <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl mb-4 border border-amber-100">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <span class="text-[10px] font-bold text-amber-600 bg-amber-50 px-2.5 py-0.5 rounded-full uppercase">पोलीस भरती विशेष</span>
+                    <h3 class="text-base font-bold text-slate-800 mt-2">महाराष्ट्र पोलीस भरती मागील प्रश्नपत्रिका</h3>
+                    <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                        मराठी व्याकरण, सामान्य ज्ञान, चालू घडामोडी आणि अंकगणित विषयांवर आधारित दर्जेदार प्रश्नसंच.
+                    </p>
+                </div>
+                <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-600"><i class="fa-solid fa-file-lines text-indigo-500 mr-1"></i> १०० प्रश्न संच</span>
+                    <a href="/exam" class="bg-indigo-50 hover:bg-indigo-600 hover:text-white text-indigo-700 text-xs font-bold px-3.5 py-1.5 rounded-lg transition">
+                        चाचणी द्या <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </a>
+                </div>
+            </div>
 
-        function loadContent(topic) {
-            const titleEl = document.getElementById('topic-title');
-            const contentEl = document.getElementById('material-content');
-            if (topic === 'sandhi') {
-                titleEl.innerText = "संधी व त्याचे प्रकार";
-                contentEl.innerHTML = "<p>जवळजवळ आलेले दोन स्वर किंवा व्यंजने एकत्र जोडण्याच्या प्रक्रियेला संधी म्हणतात.</p><ul class='list-disc list-inside mt-2'><li>स्वर संधी (उदा. देवालय)</li><li>व्यंजन संधी (उदा. सज्जन)</li><li>विसर्ग संधी (उदा. निष्पाप)</li></ul>";
-            } else if (topic === 'maharashtra_bhugol') {
-                titleEl.innerText = "महाराष्ट्र भूगोल - स्थान व विस्तार";
-                contentEl.innerHTML = "<p>महाराष्ट्र हे भारताच्या पश्चिम भागात स्थित असलेले राज्य आहे.</p><ul class='list-disc list-inside mt-2'><li>राज्याची स्थापना: १ मे १९६०</li><li>राजधानी: मुंबई, उपराजधानी: नागपूर</li><li>एकूण जिल्हे: ३६, प्रशासकीय विभाग: ६</li></ul>";
-            }
-            document.getElementById('player-title').innerText = titleEl.innerText;
-        }
+            <!-- Card 2: State Services / Group C -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm card-elevate flex flex-col justify-between">
+                <div>
+                    <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl mb-4 border border-indigo-100">
+                        <i class="fa-solid fa-building-columns"></i>
+                    </div>
+                    <span class="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2.5 py-0.5 rounded-full uppercase">गट-क / गट-ब परीक्षा</span>
+                    <h3 class="text-base font-bold text-slate-800 mt-2">स्पर्धा परीक्षा पूर्व तयारी चाचणी</h3>
+                    <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                        इतिहास, भूगोल, भारतीय राज्यघटना, अर्थव्यवस्था आणि बुद्धिमत्ता चाचणीचा संपूर्ण सराव.
+                    </p>
+                </div>
+                <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-600"><i class="fa-solid fa-file-lines text-indigo-500 mr-1"></i> मॉक सिरीज</span>
+                    <a href="/exam" class="bg-indigo-50 hover:bg-indigo-600 hover:text-white text-indigo-700 text-xs font-bold px-3.5 py-1.5 rounded-lg transition">
+                        चाचणी द्या <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </a>
+                </div>
+            </div>
 
-        function toggleLectureHall() {
-            alert("डिजिटल लेक्चर हॉल लवकरच सुरू होत आहे!");
-        }
-    </script>
+            <!-- Card 3: Current Affairs -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm card-elevate flex flex-col justify-between">
+                <div>
+                    <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl mb-4 border border-emerald-100">
+                        <i class="fa-solid fa-newspaper"></i>
+                    </div>
+                    <span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-full uppercase">चालू घडामोडी</span>
+                    <h3 class="text-base font-bold text-slate-800 mt-2">दैनिक चालू घडामोडी सराव प्रश्न</h3>
+                    <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                        दररोजच्या महत्त्वाच्या राष्ट्रीय, आंतरराष्ट्रीय व महाराष्ट्र राज्यस्तरीय घडामोडींवर आधारित सराव प्रश्न.
+                    </p>
+                </div>
+                <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-600"><i class="fa-solid fa-clock-rotate-left text-emerald-500 mr-1"></i> नियमित सराव</span>
+                    <a href="/exam" class="bg-indigo-50 hover:bg-indigo-600 hover:text-white text-indigo-700 text-xs font-bold px-3.5 py-1.5 rounded-lg transition">
+                        चाचणी द्या <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Features Box -->
+        <div class="mt-14 bg-white rounded-2xl border border-slate-200 p-6 md:p-8 shadow-sm">
+            <h3 class="text-base md:text-lg font-bold text-slate-800 text-center mb-6">श्री लर्न डिजिटल मंचाची खास वैशिष्ट्ये</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                <div class="p-3">
+                    <div class="w-10 h-10 mx-auto rounded-full bg-slate-100 flex items-center justify-center text-indigo-600 mb-2">
+                        <i class="fa-solid fa-stopwatch"></i>
+                    </div>
+                    <div class="text-sm font-bold text-slate-800">खऱ्या परीक्षेसारखा टायमर</div>
+                    <div class="text-xs text-slate-500 mt-1">प्रत्येक प्रश्नासाठी वेळेचे काटेकोर व्यवस्थापन आणि स्वयं-सबमिशन सुविधा.</div>
+                </div>
+                <div class="p-3">
+                    <div class="w-10 h-10 mx-auto rounded-full bg-slate-100 flex items-center justify-center text-emerald-600 mb-2">
+                        <i class="fa-solid fa-square-poll-vertical"></i>
+                    </div>
+                    <div class="text-sm font-bold text-slate-800">तपशीलवार गुणपत्रिका</div>
+                    <div class="text-xs text-slate-500 mt-1">अचूक उत्तरे, चुकलेले प्रश्न आणि एकूण टक्केवारीचे तत्काळ विश्लेषण.</div>
+                </div>
+                <div class="p-3">
+                    <div class="w-10 h-10 mx-auto rounded-full bg-slate-100 flex items-center justify-center text-amber-500 mb-2">
+                        <i class="fa-solid fa-shield-cat"></i>
+                    </div>
+                    <div class="text-sm font-bold text-slate-800">१००% जाहिरात विरहित अभ्यास</div>
+                    <div class="text-xs text-slate-500 mt-1">कोणत्याही पॉपअप किंवा जाहिरातींशिवाय पूर्ण लक्ष अभ्यासावर केंद्रित करा.</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Clean Footer -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-8 px-4 border-t border-slate-800 mt-auto">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-2">
+                <div class="w-6 h-6 rounded bg-indigo-600 text-white flex items-center justify-center font-bold text-xs">
+                    श्री
+                </div>
+                <span class="text-slate-200 font-bold">श्री लर्न (ShreeLearn)</span>
+            </div>
+            <div class="text-center text-slate-400 text-[11px]">
+                महाराष्ट्र स्पर्धा परीक्षा डिजिटल सराव आणि शैक्षणिक मार्गदर्शन मंच • सर्व हक्क सुरक्षित.
+            </div>
+            <div class="flex items-center gap-4 text-[11px]">
+                <a href="/exam" class="hover:text-white transition">CBT परीक्षा</a>
+                <span class="text-slate-700">•</span>
+                <a href="/" class="hover:text-white transition">मुख्य पृष्ठ</a>
+            </div>
+        </div>
+    </footer>
+
 </body>
-                      </html>
-                      
+</html>
