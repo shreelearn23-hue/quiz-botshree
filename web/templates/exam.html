@@ -27,17 +27,18 @@
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans flex flex-col h-screen select-none">
 
-    <!-- Top Navigation Bar -->
+    <!-- Top Navigation Bar (Overall Timer) -->
     <header class="bg-slate-900 text-white px-4 py-2.5 flex items-center justify-between shadow-md border-b border-slate-700">
         <div class="flex items-center gap-2">
             <span class="bg-indigo-600 text-xs px-2.5 py-1 rounded font-bold uppercase tracking-wider">CBT</span>
             <span id="header-test-title" class="text-sm font-semibold truncate max-w-[140px] md:max-w-xs">ShreeLearn Mock</span>
         </div>
 
-        <!-- Live Reverse Timer -->
-        <div class="flex items-center gap-1.5 bg-slate-800 border border-slate-700 px-3 py-1 rounded-full text-amber-400 font-mono font-bold text-sm shadow-inner">
+        <!-- Live Total Reverse Timer (Auto Calculated) -->
+        <div class="flex items-center gap-1.5 bg-slate-800 border border-slate-700 px-3 py-1 rounded-full text-amber-400 font-mono font-bold text-xs md:text-sm shadow-inner" title="एकूण उर्वरित वेळ">
             <i class="fa-regular fa-clock"></i>
-            <span id="timer-display">90:00</span>
+            <span class="text-[10px] text-slate-400 font-sans mr-1">एकूण:</span>
+            <span id="total-timer-display">00:00</span>
         </div>
 
         <!-- Manual Result & Profile Controls -->
@@ -79,7 +80,21 @@
             </div>
 
             <!-- Options Area -->
-            <div id="options-container" class="space-y-3 mt-6"></div>
+            <div id="options-container" class="space-y-3 mt-5"></div>
+
+            <!-- Per-Question Dynamic 60s Timer (Niche Alag Se) -->
+            <div class="mt-6 p-3 bg-slate-50 border border-slate-200 rounded-xl shadow-sm">
+                <div class="flex items-center justify-between text-xs font-semibold mb-1.5 text-slate-600">
+                    <span class="flex items-center gap-1.5 text-indigo-600">
+                        <i class="fa-solid fa-stopwatch animate-pulse"></i> या प्रश्नासाठी वेळ:
+                    </span>
+                    <span id="question-timer-text" class="font-mono font-bold text-indigo-700 text-sm">60s</span>
+                </div>
+                <!-- Visual Progress Bar -->
+                <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+                    <div id="question-progress-bar" class="bg-indigo-600 h-full transition-all duration-1000 ease-linear rounded-full" style="width: 100%;"></div>
+                </div>
+            </div>
 
             <!-- Bottom Navigation Controls -->
             <div class="mt-auto pt-6 flex items-center justify-between border-t border-slate-100">
@@ -117,7 +132,7 @@
         </div>
     </div>
 
-    <!-- High-Profile Result Modal with END Button -->
+    <!-- High-Profile Result Modal with Smart Back & Home END Buttons -->
     <div id="result-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 text-center shadow-2xl relative border border-slate-100">
             <div class="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-3 shadow-inner">
@@ -154,13 +169,14 @@
             </div>
 
             <div class="space-y-2">
-                <button onclick="restartCurrentQuiz()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2.5 rounded-xl text-xs font-bold transition shadow flex items-center justify-center gap-1.5">
-                    <i class="fa-solid fa-rotate-right"></i> पुन्हा सोडवा (Restart)
+                <!-- Smart Back: Usi folder/test par wapas reset -->
+                <button onclick="returnToSameFolder()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2.5 rounded-xl text-xs font-bold transition shadow flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-arrow-rotate-left"></i> याच फोल्डरवर परत जा (Back to Test)
                 </button>
                 
-                <!-- Home Page par redirect karne wala END Button -->
+                <!-- Front Home Page par jane ke liye END Button -->
                 <button onclick="window.location.href='/'" class="w-full bg-rose-600 hover:bg-rose-700 text-white py-2.5 rounded-xl text-xs font-bold transition shadow flex items-center justify-center gap-1.5">
-                    <i class="fa-solid fa-power-off"></i> परीक्षा समाप्त करा (END)
+                    <i class="fa-solid fa-house"></i> होम पेजवर जा (Home Page)
                 </button>
 
                 <button onclick="closeResultModal()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 py-2 rounded-xl text-xs font-semibold transition">
@@ -197,31 +213,74 @@
         let userAnswers = {};
         let questionResults = {}; // 'correct', 'wrong'
         let currentLoadedPath = '';
-        let timerInterval = null;
-        let timeLeft = 90 * 60;
+        
+        // Timers Variables
+        let totalTimerInterval = null;
+        let totalTimeLeft = 0;
+        let questionTimerInterval = null;
+        let questionTimeLeft = 60; // 60s per question
 
-        // Start Countdown Timer
-        function startTimer(seconds) {
-            clearInterval(timerInterval);
-            timeLeft = seconds;
-            updateTimerDisplay();
+        // Overall Test Timer (Auto Calculated)
+        function startTotalTimer(totalSeconds) {
+            clearInterval(totalTimerInterval);
+            totalTimeLeft = totalSeconds;
+            updateTotalTimerDisplay();
             
-            timerInterval = setInterval(() => {
-                if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    showResultModal(); // Time over auto submit
+            totalTimerInterval = setInterval(() => {
+                if (totalTimeLeft <= 0) {
+                    clearInterval(totalTimerInterval);
+                    clearInterval(questionTimerInterval);
+                    showResultModal(); // Entire test time over auto submit
                     return;
                 }
-                timeLeft--;
-                updateTimerDisplay();
+                totalTimeLeft--;
+                updateTotalTimerDisplay();
             }, 1000);
         }
 
-        function updateTimerDisplay() {
-            const m = Math.floor(timeLeft / 60);
-            const s = timeLeft % 60;
-            document.getElementById('timer-display').textContent = 
+        function updateTotalTimerDisplay() {
+            const m = Math.floor(totalTimeLeft / 60);
+            const s = totalTimeLeft % 60;
+            document.getElementById('total-timer-display').textContent = 
                 `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        }
+
+        // Per Question 60s Timer (Niche wala)
+        function startQuestionTimer() {
+            clearInterval(questionTimerInterval);
+            questionTimeLeft = 60;
+            updateQuestionTimerUI();
+
+            questionTimerInterval = setInterval(() => {
+                questionTimeLeft--;
+                updateQuestionTimerUI();
+
+                if (questionTimeLeft <= 0) {
+                    clearInterval(questionTimerInterval);
+                    // Time over for this question -> Auto move next
+                    if (currentIndex < questions.length - 1) {
+                        currentIndex++;
+                        renderQuestion();
+                    } else {
+                        showResultModal();
+                    }
+                }
+            }, 1000);
+        }
+
+        function updateQuestionTimerUI() {
+            document.getElementById('question-timer-text').textContent = `${questionTimeLeft}s`;
+            const percentage = (questionTimeLeft / 60) * 100;
+            const bar = document.getElementById('question-progress-bar');
+            bar.style.width = `${percentage}%`;
+
+            if (questionTimeLeft <= 10) {
+                bar.className = "bg-rose-500 h-full transition-all duration-1000 ease-linear rounded-full";
+            } else if (questionTimeLeft <= 25) {
+                bar.className = "bg-amber-500 h-full transition-all duration-1000 ease-linear rounded-full";
+            } else {
+                bar.className = "bg-indigo-600 h-full transition-all duration-1000 ease-linear rounded-full";
+            }
         }
 
         async function initExam() {
@@ -320,8 +379,9 @@
                 userAnswers = {};
                 questionResults = {};
                 
-                // 90 minutes exam timer
-                startTimer(90 * 60);
+                // Dynamic Total Time Calculation: Sawal × 60 Seconds
+                const calculatedTotalSeconds = questions.length * 60;
+                startTotalTimer(calculatedTotalSeconds);
 
                 renderPalette();
                 renderQuestion();
@@ -370,11 +430,21 @@
                 optionsContainer.appendChild(optBox);
             });
 
+            // Start 60s Question Timer if not answered
+            if (!isAlreadyAnswered) {
+                startQuestionTimer();
+            } else {
+                clearInterval(questionTimerInterval);
+                document.getElementById('question-timer-text').textContent = `पूर्ण`;
+                document.getElementById('question-progress-bar').style.width = '0%';
+            }
+
             renderPalette();
         }
 
         // Option Click -> Highlight -> Instant Palette Update -> Auto Next (600ms)
         function selectOption(selectedIdx, correctAns) {
+            clearInterval(questionTimerInterval);
             userAnswers[currentIndex] = selectedIdx;
             
             if (selectedIdx === correctAns || questions[currentIndex].options[selectedIdx] === correctAns) {
@@ -386,13 +456,12 @@
             renderQuestion();
             renderPalette();
 
-            // Auto Advance to next question after small delay
+            // Auto Advance to next question
             setTimeout(() => {
                 if (currentIndex < questions.length - 1) {
                     currentIndex++;
                     renderQuestion();
                 } else {
-                    // All questions finished -> Auto Show High Profile Result
                     showResultModal();
                 }
             }, 600);
@@ -449,6 +518,9 @@
 
         // High Profile Result Modal Calculations
         function showResultModal() {
+            clearInterval(totalTimerInterval);
+            clearInterval(questionTimerInterval);
+
             let correct = 0;
             let wrong = 0;
             let unattempted = 0;
@@ -477,7 +549,8 @@
             document.getElementById('result-modal').classList.add('hidden');
         }
 
-        function restartCurrentQuiz() {
+        // Smart Back: Usi Test/Folder par reset hona
+        function returnToSameFolder() {
             closeResultModal();
             loadQuiz(currentLoadedPath);
         }
