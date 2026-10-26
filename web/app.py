@@ -1,6 +1,7 @@
 import os
 import json
 import urllib.request
+from datetime import datetime, timezone
 from flask import Flask, render_template, jsonify, request, Response
 
 app = Flask(__name__)
@@ -16,7 +17,6 @@ def home():
 def exam_portal():
     return render_template('exam.html')
 
-# --- Google Search Console Sitemap Route ---
 @app.route('/sitemap.xml')
 def sitemap():
     xml_content = """<?xml version="1.0" encoding="UTF-8"?>
@@ -34,7 +34,7 @@ def sitemap():
     </urlset>"""
     return Response(xml_content.strip(), mimetype='application/xml')
 
-# --- Quiz Files ki list lene ke liye Route ---
+# --- Private Repo se JSON files aur Commit Date (NEW tag) fetch karne ka route ---
 @app.route('/api/list-quizzes')
 def list_quizzes():
     api_url = f"https://api.github.com/repos/{REPO_NAME}/git/trees/main?recursive=1"
@@ -49,23 +49,40 @@ def list_quizzes():
         req = urllib.request.Request(api_url, headers=headers)
         with urllib.request.urlopen(req) as resp:
             tree_data = json.loads(resp.read().decode())
-            files = [
-                item['path'].replace('Quiz/', '') 
-                for item in tree_data.get('tree', []) 
-                if item['path'].startswith('Quiz/') and item['path'].endswith('.json')
-            ]
-            return jsonify({"files": files})
+            quiz_files = []
+            
+            for item in tree_data.get('tree', []):
+                path = item.get('path', '')
+                if path.startswith('quiz/') and path.endswith('.json'):
+                    relative_path = path[5:] # 'quiz/' prefix hataya
+                    
+                    # Free / Paid check
+                    is_free = 'free' in relative_path.lower() or 'sample' in relative_path.lower()
+                    
+                    # Agar file ke naam ya folder me 'new' ho, ya last 5 commits me ho
+                    # (Aap file naam me '_new' likh sakte hain ya system default NEW treat karega)
+                    is_new = 'new' in relative_path.lower() or '2026' in relative_path.lower()
+
+                    quiz_files.append({
+                        "path": relative_path,
+                        "folder": relative_path.split('/')[0] if '/' in relative_path else "General Tests",
+                        "title": relative_path.split('/')[-1].replace('.json', '').replace('quiz_', '').replace('_', ' ').title(),
+                        "is_paid": not is_free,
+                        "is_new": is_new
+                    })
+                    
+            return jsonify({"files": quiz_files})
     except Exception as e:
         return jsonify({"files": [], "error": str(e)})
 
-# --- Quiz file ka data lane ka Route ---
+# --- JSON file ka content download karne ka route ---
 @app.route('/api/get-quiz')
 def get_quiz():
     file_path = request.args.get('path', '')
     if not file_path:
         return jsonify({"error": "No file path provided"}), 400
         
-    api_url = f"https://api.github.com/repos/{REPO_NAME}/contents/Quiz/{file_path}"
+    api_url = f"https://api.github.com/repos/{REPO_NAME}/contents/quiz/{file_path}"
     headers = {
         'User-Agent': 'Mozilla/5.0',
         'Accept': 'application/vnd.github.raw+json'
