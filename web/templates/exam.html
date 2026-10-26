@@ -223,9 +223,31 @@
                 const res = await fetch(`/api/get-quiz?path=${encodeURIComponent(filePath)}`);
                 const data = await res.json();
                 
-                // Flexible keys support
-                questions = data.questions || data.quiz || (Array.isArray(data) ? data : []);
-                document.getElementById('header-test-title').textContent = data.title || data.test_title || filePath.split('/').pop().replace('.json', '');
+                // Telegram Bot JSON Structure Parsing
+                questions = [];
+                if (data.categories && Array.isArray(data.categories)) {
+                    data.categories.forEach(cat => {
+                        if (cat.quizzes && Array.isArray(cat.quizzes)) {
+                            questions.push(...cat.quizzes);
+                        }
+                    });
+                } else if (data.questions && Array.isArray(data.questions)) {
+                    questions = data.questions;
+                } else if (data.quiz && Array.isArray(data.quiz)) {
+                    questions = data.quiz;
+                } else if (Array.isArray(data)) {
+                    questions = data;
+                }
+
+                const titleText = (data.categories && data.categories[0] && data.categories[0].display_name) 
+                                  || data.title 
+                                  || filePath.split('/').pop().replace('.json', '');
+                document.getElementById('header-test-title').textContent = titleText;
+
+                if (questions.length === 0) {
+                    document.getElementById('question-text').textContent = "या फाईलमध्ये प्रश्न सापडले नाहीत.";
+                    return;
+                }
 
                 currentIndex = 0;
                 userAnswers = {};
@@ -342,8 +364,8 @@
             questions.forEach((q, idx) => {
                 if (userAnswers[idx] !== undefined) {
                     answered++;
-                    const ans = q.answer !== undefined ? q.answer : q.correct;
-                    if (userAnswers[idx] === ans || q.options[userAnswers[idx]] === ans) {
+                    const correctAns = q.correct_option_id !== undefined ? q.correct_option_id : (q.answer !== undefined ? q.answer : q.correct);
+                    if (userAnswers[idx] === correctAns || q.options[userAnswers[idx]] === correctAns) {
                         correct++;
                     }
                 }
