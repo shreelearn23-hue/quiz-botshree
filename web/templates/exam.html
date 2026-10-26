@@ -17,7 +17,7 @@
     <!-- Top TCS Header -->
     <header class="bg-slate-900 text-white px-4 py-2 flex justify-between items-center shadow-md">
         <div class="flex items-center gap-3">
-            <span class="bg-indigo-600 text-xs px-2 py-1 rounded font-bold uppercase tracking-wider">श्री CBT</span>
+            <span class="bg-indigo-600 text-xs px-2 py-1 rounded font-bold uppercase tracking-wider">CBT</span>
             <h1 class="text-sm font-bold truncate max-w-[200px] sm:max-w-md" id="header-test-title">Shreelearn Mock Test</h1>
         </div>
         <div class="flex items-center gap-4">
@@ -34,10 +34,10 @@
     </header>
 
     <!-- Quiz Selector Bar -->
-    <div class="bg-slate-800 text-white px-4 py-2 flex flex-wrap items-center justify-between gap-2 border-b border-slate-700 text-xs">
+    <div class="bg-slate-800 text-white px-4 py-2 flex flex-wrap items-center justify-between gap-2 border-b border-slate-700">
         <div class="flex items-center gap-2 w-full sm:w-auto">
-            <span class="text-slate-300 font-semibold"><i class="fa-solid fa-folder-open text-indigo-400"></i> परीक्षा निवडा:</span>
-            <select id="quiz-dropdown" onchange="changeQuizFile(this.value)" class="bg-slate-900 text-amber-300 border border-slate-600 px-2 py-1 rounded flex-1 sm:w-64 focus:outline-none">
+            <span class="text-slate-300 text-xs font-semibold"><i class="fa-solid fa-folder-open text-indigo-400"></i> परीक्षा निवडा:</span>
+            <select id="quiz-dropdown" onchange="handleQuizSelection(this)" class="bg-slate-900 text-amber-300 border border-slate-600 text-xs rounded px-2 py-1.5 focus:outline-none focus:border-indigo-500 w-full sm:w-64">
                 <option value="">चाचण्या शोधत आहे...</option>
             </select>
         </div>
@@ -46,98 +46,109 @@
     </div>
 
     <!-- Main Exam Body -->
-    <main class="flex-1 flex flex-col md:flex-row overflow-hidden">
+    <div class="flex-1 flex flex-col md:flex-row overflow-hidden relative">
         
-        <!-- Question Screen (Left) -->
-        <section class="flex-1 flex flex-col bg-white border-r border-gray-300 overflow-hidden">
-            <!-- Question Meta -->
-            <div class="px-4 py-2 border-b border-gray-200 bg-gray-50 flex justify-between items-center text-xs text-gray-600 font-semibold">
-                <span id="current-q-label">प्रश्न क्र. 1</span>
-                <span>गुण: <span class="text-green-600">+2.00</span> | <span class="text-red-500">-0.50</span></span>
+        <!-- Question Area -->
+        <div class="flex-1 flex flex-col bg-white overflow-y-auto">
+            <div class="p-4 border-b border-gray-200 flex justify-between items-center bg-gray-50">
+                <span class="font-bold text-sm text-gray-700" id="q-number-display">प्रश्न क्र. 1</span>
+                <div class="flex gap-2">
+                    <span class="text-[11px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-medium">बरोबर: +1.0</span>
+                    <span class="text-[11px] bg-rose-100 text-rose-800 px-2 py-0.5 rounded font-medium">चूक: -0.25</span>
+                </div>
             </div>
 
-            <!-- Question & Options Area -->
-            <div class="flex-1 p-4 md:p-6 overflow-y-auto">
-                <p id="question-text" class="text-sm md:text-base font-medium text-gray-900 mb-6 leading-relaxed">
-                    प्रश्न लोड होत आहे, कृपया थांबा...
-                </p>
-
+            <div class="p-5 flex-1 overflow-y-auto">
+                <div id="question-text" class="text-base text-gray-800 font-medium mb-6 leading-relaxed">
+                    चाचणी लोड होत आहे, कृपया प्रतीक्षा करा...
+                </div>
                 <div id="options-container" class="space-y-3"></div>
             </div>
 
-            <!-- Bottom Actions -->
-            <footer class="p-3 bg-gray-50 border-t border-gray-300 flex flex-wrap justify-between items-center gap-2">
+            <!-- Bottom Navigation Bar -->
+            <div class="bg-gray-50 p-3 border-t border-gray-200 flex flex-wrap gap-2 justify-between items-center">
                 <div class="flex gap-2">
-                    <button onclick="markForReview()" class="px-3 py-1.5 bg-purple-100 hover:bg-purple-200 text-purple-800 border border-purple-300 rounded text-xs font-semibold">
-                        रिव्ह्यूसाठी ठेवा
+                    <button onclick="markForReview()" class="px-3 py-1.5 bg-amber-50 border border-amber-400 text-amber-700 rounded text-xs font-semibold hover:bg-amber-100 flex items-center gap-1">
+                        <i class="fa-regular fa-bookmark"></i> Review करा
                     </button>
-                    <button onclick="clearResponse()" class="px-3 py-1.5 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded text-xs font-semibold">
-                        उत्तर हटवा
+                    <button onclick="clearResponse()" class="px-3 py-1.5 bg-gray-100 border border-gray-300 text-gray-700 rounded text-xs font-semibold hover:bg-gray-200">
+                        Clear
                     </button>
                 </div>
                 <div class="flex gap-2">
-                    <button onclick="prevQuestion()" class="px-3 py-1.5 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded text-xs font-semibold">
+                    <button onclick="prevQuestion()" class="px-4 py-1.5 bg-slate-200 hover:bg-slate-300 text-gray-800 rounded text-xs font-semibold">
                         मागे
                     </button>
-                    <button onclick="saveAndNext()" class="px-4 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded text-xs font-semibold shadow">
-                        सेव्ह करून पुढे जा
+                    <button onclick="saveAndNext()" class="px-5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-xs font-semibold shadow">
+                        Save & Next
                     </button>
                 </div>
-            </footer>
-        </section>
+            </div>
+        </div>
 
-        <!-- Question Palette (Right Panel) -->
-        <aside class="w-full md:w-80 bg-gray-50 flex flex-col border-t md:border-t-0 border-gray-300">
+        <!-- Right Side: Question Palette -->
+        <div class="w-full md:w-80 bg-slate-50 border-l border-gray-200 flex flex-col h-64 md:h-full">
+            <div class="p-3 border-b border-gray-200 font-bold text-xs text-gray-700 flex justify-between items-center">
+                <span>प्रश्न पत्रिका पॅलेट</span>
+                <span id="palette-count" class="text-[11px] text-gray-500">0/0</span>
+            </div>
+            
             <!-- Legend Indicators -->
-            <div class="p-3 border-b border-gray-200 grid grid-cols-2 gap-2 text-[11px] text-gray-600">
-                <div class="flex items-center gap-1.5"><span class="w-4 h-4 rounded-full bg-green-600 text-white inline-flex items-center justify-center text-[9px] font-bold" id="count-ans">0</span> उत्तरे दिलेले</div>
-                <div class="flex items-center gap-1.5"><span class="w-4 h-4 rounded-full bg-red-500 text-white inline-flex items-center justify-center text-[9px] font-bold" id="count-unans">0</span> उत्तरे न दिलेले</div>
-                <div class="flex items-center gap-1.5"><span class="w-4 h-4 rounded-full bg-purple-600 text-white inline-flex items-center justify-center text-[9px] font-bold" id="count-review">0</span> रिव्ह्यूसाठी</div>
-                <div class="flex items-center gap-1.5"><span class="w-4 h-4 rounded-full bg-gray-200 text-gray-700 border inline-flex items-center justify-center text-[9px] font-bold" id="count-notvisit">0</span> न पाहिलेले</div>
+            <div class="p-2 grid grid-cols-2 gap-2 text-[10px] bg-white border-b border-gray-200">
+                <div class="flex items-center gap-1.5"><span class="w-3.5 h-3.5 bg-emerald-500 rounded text-white flex items-center justify-center font-bold text-[9px]">✓</span> सोडवले</div>
+                <div class="flex items-center gap-1.5"><span class="w-3.5 h-3.5 bg-rose-500 rounded text-white flex items-center justify-center font-bold text-[9px]">✗</span> न सोडवलेले</div>
+                <div class="flex items-center gap-1.5"><span class="w-3.5 h-3.5 bg-purple-500 rounded text-white flex items-center justify-center font-bold text-[9px]">★</span> Review</div>
+                <div class="flex items-center gap-1.5"><span class="w-3.5 h-3.5 bg-gray-200 rounded text-gray-700 flex items-center justify-center font-bold text-[9px]">○</span> पाहिले नाही</div>
             </div>
 
-            <!-- Palette Numbers -->
-            <div class="flex-1 p-3 overflow-y-auto">
-                <h4 class="text-xs font-bold text-gray-700 mb-2">प्रश्न पॅलेट:</h4>
-                <div id="palette-grid" class="grid grid-cols-5 gap-2"></div>
-            </div>
+            <!-- Question Numbers Grid -->
+            <div id="palette-grid" class="flex-1 p-3 overflow-y-auto grid grid-cols-5 gap-2 content-start"></div>
 
-            <!-- Submit Test -->
-            <div class="p-3 border-t border-gray-200 bg-white">
-                <button onclick="submitTest()" class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded text-xs shadow tracking-wide">
-                    परीक्षा सबमिट करा (SUBMIT)
+            <!-- Final Submit Button -->
+            <div class="p-3 bg-white border-t border-gray-200">
+                <button onclick="submitExam()" class="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded shadow transition">
+                    पेपर सबमिट करा (Submit)
                 </button>
-            </div>
-        </aside>
-    </main>
-
-    <!-- Post-Exam Modal -->
-    <div id="result-modal" class="fixed inset-0 bg-black/60 hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full p-6 text-center space-y-4">
-            <h3 class="text-xl font-bold text-gray-800">परीक्षेचा निकाल 📊</h3>
-            <div class="grid grid-cols-3 gap-2 py-3 bg-gray-50 rounded-lg text-xs">
-                <div><div class="font-bold text-gray-500">एकूण प्रश्न</div><div id="res-total" class="text-base font-bold text-gray-800">0</div></div>
-                <div><div class="font-bold text-green-600">बरोबर</div><div id="res-correct" class="text-base font-bold text-green-600">0</div></div>
-                <div><div class="font-bold text-red-500">चूक</div><div id="res-wrong" class="text-base font-bold text-red-500">0</div></div>
-            </div>
-            <div class="text-2xl font-black text-indigo-600" id="res-score">गुण: 0 / 0</div>
-            <div class="flex gap-2">
-                <button onclick="location.reload()" class="flex-1 py-2 bg-indigo-600 text-white rounded font-semibold text-xs">पुन्हा सोडवा</button>
-                <a href="/" class="flex-1 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded font-semibold text-xs flex items-center justify-center">मुख्य पानावर जा</a>
             </div>
         </div>
     </div>
 
-    <!-- Logic Engine -->
+    <!-- Paid Test Lock Modal (Ab Body Ke Andar Hai) -->
+    <div id="payment-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 text-center shadow-2xl border border-amber-200">
+            <div class="w-14 h-14 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl shadow-inner">
+                <i class="fas fa-lock"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-800 mb-1">प्रिमियम सराव चाचणी</h3>
+            <p class="text-xs text-slate-500 mb-4">ही चाचणी सुरू करण्यासाठी प्रिमियम ॲक्सेस आवश्यक आहे.</p>
+            
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 mb-4">
+                <div class="text-[11px] text-slate-400 font-semibold mb-1">UPI द्वारे फी भरा:</div>
+                <div class="font-mono text-sm font-bold text-indigo-700 bg-white py-1 px-2 rounded border border-dashed border-indigo-300 inline-block">
+                    shreelearn@upi
+                </div>
+                <div class="text-[10px] text-slate-400 mt-1">किंवा अधिक माहितीसाठी संपर्क करा</div>
+            </div>
+
+            <div class="flex flex-col gap-2">
+                <a href="https://t.me/" target="_blank" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs flex items-center justify-center gap-2 transition shadow">
+                    <i class="fab fa-telegram-plane"></i> टेलिग्रामवर संपर्क करा
+                </a>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 text-xs py-1.5 font-medium">
+                    रद्द करा (मागे जा)
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         let questions = [];
         let currentIndex = 0;
-        let userResponses = {}; // { index: { selected: null, status: 'visited'/'answered'/'review' } }
-        let timerSeconds = 90 * 60;
-        let timerInterval = null;
+        let userAnswers = {};
+        let questionStatus = {}; // 'answered', 'unanswered', 'review', 'not_visited'
+        let currentLoadedPath = '';
 
-        // Auto Load Quizzes list from GitHub repo
-        async function fetchAvailableQuizzes() {
+        async function initExam() {
             const dropdown = document.getElementById('quiz-dropdown');
             try {
                 const res = await fetch('/api/list-quizzes');
@@ -150,12 +161,14 @@
                     return;
                 }
 
-                // Folders ke according grouping
+                // Group by Folders
                 const groups = {};
                 files.forEach(item => {
                     if (!groups[item.folder]) groups[item.folder] = [];
                     groups[item.folder].push(item);
                 });
+
+                let firstFreeQuiz = null;
 
                 Object.keys(groups).forEach(folder => {
                     const optgroup = document.createElement('optgroup');
@@ -164,166 +177,142 @@
                     groups[folder].forEach(q => {
                         const opt = document.createElement('option');
                         opt.value = q.path;
+                        opt.dataset.paid = q.is_paid ? 'true' : 'false';
                         
-                        // NEW Badge + FREE/PAID Badge
                         const newBadge = q.is_new ? '🔥 [NEW] ' : '';
                         const accessBadge = q.is_paid ? '🔒 [PAID] ' : '🟢 [FREE] ';
                         
                         opt.textContent = `${newBadge}${accessBadge}${q.title}`;
                         optgroup.appendChild(opt);
+
+                        if (!firstFreeQuiz && !q.is_paid) {
+                            firstFreeQuiz = q.path;
+                        }
                     });
                     dropdown.appendChild(optgroup);
                 });
 
-                // Pehla test auto load karein
-                loadQuizData(files[0].path);
+                // Pehli available free test chalu karein
+                const testToLoad = firstFreeQuiz || files[0].path;
+                dropdown.value = testToLoad;
+                loadQuiz(testToLoad);
 
             } catch (err) {
-                console.error("List fetch error:", err);
-            }
-        }
-        async function loadQuizData(path) {
-            try {
-                const res = await fetch(`/api/get-quiz?path=${encodeURIComponent(path)}`);
-                const data = await res.json();
-                parseQuestions(data);
-            } catch (err) {
-                alert("चाचणी लोड करताना अडचण आली. कृपया पुन्हा प्रयत्न करा.");
+                console.error("Quiz init failed:", err);
             }
         }
 
-        function changeQuizFile(val) {
-            if (val) loadQuizData(val);
-        }
-
-        // Adapter to handle Quiz-bot JSON format
-        function parseQuestions(raw) {
-            questions = [];
-            let qId = 1;
-
-            if (raw.categories && Array.isArray(raw.categories)) {
-                raw.categories.forEach(cat => {
-                    const subject = cat.display_name || "सामान्य";
-                    (cat.quizzes || []).forEach(q => {
-                        questions.push({
-                            id: qId++,
-                            subject: subject,
-                            question: q.question || q.q,
-                            options: q.options || q.choices || [],
-                            answer: (q.correct_option_id !== undefined) ? q.correct_option_id : (q.answer !== undefined ? q.answer : 0),
-                            explanation: q.explanation || ""
-                        });
-                    });
-                });
-            } else if (Array.isArray(raw)) {
-                raw.forEach(q => {
-                    questions.push({
-                        id: qId++,
-                        subject: q.subject || q.category || "सामान्य",
-                        question: q.question || q.q,
-                        options: q.options || q.choices || [],
-                        answer: (q.correct_option_id !== undefined) ? q.correct_option_id : 0,
-                        explanation: q.explanation || ""
-                    });
-                });
-            }
-
-            if (questions.length === 0) {
-                document.getElementById('question-text').textContent = "या फाईलमध्ये कोणतेही प्रश्न आढळले नाहीत.";
+        function handleQuizSelection(dropdown) {
+            const selectedOpt = dropdown.options[dropdown.selectedIndex];
+            if (selectedOpt.dataset.paid === 'true') {
+                document.getElementById('payment-modal').classList.remove('hidden');
+                dropdown.value = currentLoadedPath; // Purani free file par wapas le jao
                 return;
             }
-
-            // Reset States
-            userResponses = {};
-            questions.forEach((_, idx) => {
-                userResponses[idx] = { selected: null, status: 'notvisited' };
-            });
-
-            currentIndex = 0;
-            userResponses[0].status = 'visited';
-
-            setupSubjectTabs();
-            renderPalette();
-            renderQuestion();
-            startTimer();
+            loadQuiz(dropdown.value);
         }
 
-        function setupSubjectTabs() {
-            const container = document.getElementById('subject-tabs-container');
-            container.innerHTML = '';
-            const subjects = [...new Set(questions.map(q => q.subject))];
+        function closeModal() {
+            document.getElementById('payment-modal').classList.add('hidden');
+        }
 
-            subjects.forEach(sub => {
-                const btn = document.createElement('button');
-                btn.className = "px-2.5 py-0.5 rounded text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 font-medium whitespace-nowrap";
-                btn.textContent = sub;
-                btn.onclick = () => {
-                    const firstIdx = questions.findIndex(q => q.subject === sub);
-                    if (firstIdx !== -1) jumpToQuestion(firstIdx);
-                };
-                container.appendChild(btn);
-            });
+        async function loadQuiz(filePath) {
+            currentLoadedPath = filePath;
+            document.getElementById('question-text').textContent = "चाचणीचे प्रश्न लोड होत आहेत...";
+            try {
+                const res = await fetch(`/api/get-quiz?path=${encodeURIComponent(filePath)}`);
+                const data = await res.json();
+                
+                // Flexible keys support
+                questions = data.questions || data.quiz || (Array.isArray(data) ? data : []);
+                document.getElementById('header-test-title').textContent = data.title || data.test_title || filePath.split('/').pop().replace('.json', '');
+
+                currentIndex = 0;
+                userAnswers = {};
+                questionStatus = {};
+                
+                questions.forEach((_, idx) => questionStatus[idx] = 'not_visited');
+                renderPalette();
+                renderQuestion();
+            } catch (err) {
+                document.getElementById('question-text').textContent = "प्रश्न लोड करताना त्रुटी आली.";
+            }
         }
 
         function renderQuestion() {
+            if (!questions || questions.length === 0) return;
             const q = questions[currentIndex];
-            if (!q) return;
+            
+            document.getElementById('q-number-display').textContent = `प्रश्न क्र. ${currentIndex + 1} / ${questions.length}`;
+            document.getElementById('question-text').textContent = q.question || q.text || q.q || "";
 
-            document.getElementById('current-q-label').textContent = `प्रश्न क्र. ${currentIndex + 1} (${q.subject})`;
-            document.getElementById('question-text').textContent = q.question;
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
 
-            const optContainer = document.getElementById('options-container');
-            optContainer.innerHTML = '';
-
-            const currentAnswer = userResponses[currentIndex].selected;
-
-            q.options.forEach((optText, optIdx) => {
-                const label = document.createElement('label');
-                label.className = `flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition ${currentAnswer === optIdx ? 'bg-indigo-50 border-indigo-500 font-semibold text-indigo-900' : 'bg-white border-gray-200 hover:bg-gray-50'}`;
+            const opts = q.options || q.choices || [];
+            opts.forEach((opt, idx) => {
+                const optBox = document.createElement('label');
+                optBox.className = `flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition ${userAnswers[currentIndex] === idx ? 'bg-indigo-50 border-indigo-600 text-indigo-900 font-semibold' : 'bg-white border-gray-200 hover:bg-gray-50'}`;
                 
-                label.innerHTML = `
-                    <input type="radio" name="opt" value="${optIdx}" ${currentAnswer === optIdx ? 'checked' : ''} onchange="selectOption(${optIdx})" class="text-indigo-600 focus:ring-indigo-500">
-                    <span class="text-xs sm:text-sm text-gray-800">${optText}</span>
+                optBox.innerHTML = `
+                    <input type="radio" name="opt" value="${idx}" ${userAnswers[currentIndex] === idx ? 'checked' : ''} class="w-4 h-4 text-indigo-600 focus:ring-0">
+                    <span class="text-sm">${opt}</span>
                 `;
-                optContainer.appendChild(label);
+                optBox.onclick = () => {
+                    userAnswers[currentIndex] = idx;
+                    questionStatus[currentIndex] = 'answered';
+                    renderQuestion();
+                    renderPalette();
+                };
+                optionsContainer.appendChild(optBox);
             });
 
-            updatePaletteCounts();
-        }
-
-        function selectOption(idx) {
-            userResponses[currentIndex].selected = idx;
-        }
-
-        function saveAndNext() {
-            if (userResponses[currentIndex].selected !== null) {
-                userResponses[currentIndex].status = 'answered';
-            } else if (userResponses[currentIndex].status !== 'review') {
-                userResponses[currentIndex].status = 'unanswered';
+            if (questionStatus[currentIndex] === 'not_visited') {
+                questionStatus[currentIndex] = 'unanswered';
             }
-            nextQuestion();
-        }
-
-        function markForReview() {
-            userResponses[currentIndex].status = 'review';
-            nextQuestion();
-        }
-
-        function clearResponse() {
-            userResponses[currentIndex].selected = null;
-            userResponses[currentIndex].status = 'unanswered';
-            renderQuestion();
             renderPalette();
         }
 
-        function nextQuestion() {
+        function renderPalette() {
+            const grid = document.getElementById('palette-grid');
+            grid.innerHTML = '';
+            
+            let answeredCount = 0;
+            questions.forEach((_, idx) => {
+                const btn = document.createElement('button');
+                btn.textContent = idx + 1;
+                btn.className = "w-8 h-8 rounded text-xs font-bold transition flex items-center justify-center ";
+                
+                const status = questionStatus[idx];
+                if (status === 'answered') {
+                    btn.className += "bg-emerald-500 text-white";
+                    answeredCount++;
+                } else if (status === 'review') {
+                    btn.className += "bg-purple-500 text-white";
+                } else if (status === 'unanswered') {
+                    btn.className += "bg-rose-500 text-white";
+                } else {
+                    btn.className += "bg-gray-200 text-gray-700";
+                }
+
+                if (idx === currentIndex) {
+                    btn.className += " ring-2 ring-indigo-600 ring-offset-1";
+                }
+
+                btn.onclick = () => {
+                    currentIndex = idx;
+                    renderQuestion();
+                };
+                grid.appendChild(btn);
+            });
+
+            document.getElementById('palette-count').textContent = `${answeredCount}/${questions.length}`;
+        }
+
+        function saveAndNext() {
             if (currentIndex < questions.length - 1) {
                 currentIndex++;
-                if (userResponses[currentIndex].status === 'notvisited') {
-                    userResponses[currentIndex].status = 'unanswered';
-                }
                 renderQuestion();
-                renderPalette();
             }
         }
 
@@ -331,99 +320,41 @@
             if (currentIndex > 0) {
                 currentIndex--;
                 renderQuestion();
-                renderPalette();
             }
         }
 
-        function jumpToQuestion(index) {
-            currentIndex = index;
-            if (userResponses[currentIndex].status === 'notvisited') {
-                userResponses[currentIndex].status = 'unanswered';
-            }
+        function markForReview() {
+            questionStatus[currentIndex] = 'review';
+            saveAndNext();
+        }
+
+        function clearResponse() {
+            delete userAnswers[currentIndex];
+            questionStatus[currentIndex] = 'unanswered';
             renderQuestion();
             renderPalette();
         }
 
-        function renderPalette() {
-            const grid = document.getElementById('palette-grid');
-            grid.innerHTML = '';
-
-            questions.forEach((_, idx) => {
-                const state = userResponses[idx].status;
-                const isCurrent = idx === currentIndex;
-                const btn = document.createElement('button');
-                btn.textContent = idx + 1;
-                btn.className = `w-8 h-8 rounded text-xs font-bold transition flex items-center justify-center ${isCurrent ? 'ring-2 ring-indigo-500 ring-offset-1' : ''}`;
-
-                if (state === 'answered') {
-                    btn.classList.add('bg-green-600', 'text-white');
-                } else if (state === 'review') {
-                    btn.classList.add('bg-purple-600', 'text-white');
-                } else if (state === 'unanswered') {
-                    btn.classList.add('bg-red-500', 'text-white');
-                } else {
-                    btn.classList.add('bg-gray-200', 'text-gray-700');
-                }
-
-                btn.onclick = () => jumpToQuestion(idx);
-                grid.appendChild(btn);
-            });
-        }
-
-        function updatePaletteCounts() {
-            let ans = 0, unans = 0, rev = 0, notvisit = 0;
-            Object.values(userResponses).forEach(r => {
-                if (r.status === 'answered') ans++;
-                else if (r.status === 'review') rev++;
-                else if (r.status === 'unanswered') unans++;
-                else notvisit++;
-            });
-
-            document.getElementById('count-ans').textContent = ans;
-            document.getElementById('count-unans').textContent = unans;
-            document.getElementById('count-review').textContent = rev;
-            document.getElementById('count-notvisit').textContent = notvisit;
-        }
-
-        function startTimer() {
-            if (timerInterval) clearInterval(timerInterval);
-            timerInterval = setInterval(() => {
-                if (timerSeconds <= 0) {
-                    clearInterval(timerInterval);
-                    submitTest();
-                    return;
-                }
-                timerSeconds--;
-                const m = Math.floor(timerSeconds / 60).toString().padStart(2, '0');
-                const s = (timerSeconds % 60).toString().padStart(2, '0');
-                document.getElementById('timer').textContent = `${m}:${s}`;
-            }, 1000);
-        }
-
-        function submitTest() {
-            clearInterval(timerInterval);
-            let correct = 0, wrong = 0;
-
+        function submitExam() {
+            let correct = 0;
+            let answered = 0;
+            
             questions.forEach((q, idx) => {
-                const userAns = userResponses[idx].selected;
-                if (userAns !== null) {
-                    if (userAns === q.answer) correct++;
-                    else wrong++;
+                if (userAnswers[idx] !== undefined) {
+                    answered++;
+                    const ans = q.answer !== undefined ? q.answer : q.correct;
+                    if (userAnswers[idx] === ans || q.options[userAnswers[idx]] === ans) {
+                        correct++;
+                    }
                 }
             });
 
-            const score = (correct * 2) - (wrong * 0.5);
-            document.getElementById('res-total').textContent = questions.length;
-            document.getElementById('res-correct').textContent = correct;
-            document.getElementById('res-wrong').textContent = wrong;
-            document.getElementById('res-score').textContent = `गुण: ${score.toFixed(2)} / ${questions.length * 2}`;
-
-            document.getElementById('result-modal').classList.remove('hidden');
+            const score = correct;
+            alert(`चाचणी निकाल:\nएकूण प्रश्न: ${questions.length}\nसोडवलेले: ${answered}\nबरोबर उत्तरे: ${correct}\nमिळालेले गुण: ${score}`);
         }
 
-        // Initialize on load
-        window.onload = fetchAvailableQuizzes;
+        // Start Exam System
+        initExam();
     </script>
 </body>
-          </html>
-          
+</html>
