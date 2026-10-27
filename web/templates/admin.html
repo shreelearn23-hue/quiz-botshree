@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>श्री लर्न - व्यवस्थापक (Admin) पॅनेल</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen p-4 md:p-8">
+
+    <div class="max-w-3xl mx-auto space-y-6">
+
+        <!-- Top Header -->
+        <div class="bg-indigo-900 text-white rounded-2xl p-5 shadow-sm flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center font-bold text-lg">
+                    श्री
+                </div>
+                <div>
+                    <h1 class="text-base md:text-lg font-bold">श्री लर्न • व्यवस्थापक नियंत्रण कक्ष (Admin)</h1>
+                    <p class="text-[11px] text-indigo-200">थेट मोबाईलवरून प्रश्न, PDF व अभ्यास साहित्य जोडा</p>
+                </div>
+            </div>
+            <a href="/" class="text-xs bg-indigo-800 hover:bg-indigo-700 px-3 py-1.5 rounded-lg border border-indigo-600 font-semibold transition">
+                मुख्य पृष्ठ
+            </a>
+        </div>
+
+        {% if message %}
+        <div class="p-3.5 bg-emerald-100 border border-emerald-300 text-emerald-800 text-xs rounded-xl font-bold flex items-center gap-2">
+            <i class="fa-solid fa-circle-check text-emerald-600 text-base"></i>
+            <span>{{ message }}</span>
+        </div>
+        {% endif %}
+
+        {% if error %}
+        <div class="p-3.5 bg-rose-100 border border-rose-300 text-rose-800 text-xs rounded-xl font-bold flex items-center gap-2">
+            <i class="fa-solid fa-triangle-exclamation text-rose-600 text-base"></i>
+            <span>{{ error }}</span>
+        </div>
+        {% endif %}
+
+        <!-- SECTION 1: Naya Question Add Karne Ka Form -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+            <div class="flex items-center gap-2 border-b border-slate-100 pb-3 mb-4">
+                <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-sm font-bold">
+                    <i class="fa-solid fa-plus"></i>
+                </div>
+                <div>
+                    <h2 class="text-sm font-bold text-slate-900">नवीन सराव प्रश्न जोडा (Add Question)</h2>
+                    <p class="text-[11px] text-slate-500">प्रश्न आणि पर्याय भरून थेट CBT सिरीजमध्ये समाविष्ट करा</p>
+                </div>
+            </div>
+
+            <form method="POST" action="/admin/add-question" class="space-y-3.5 text-xs">
+                <!-- Secret Admin Key -->
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">व्यवस्थापक पासवर्ड (Secret Key) *</label>
+                    <input type="password" name="admin_key" required placeholder="तुमचा गुप्त ॲडमिन पासवर्ड टाका" class="w-full p-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50">
+                </div>
+
+                <!-- Subject Category -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">विभाग व विषय निवडा *</label>
+                        <select name="subject" class="w-full p-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
+                            <option value="पोलीस भरती - मराठी व्याकरण">पोलीस भरती - मराठी व्याकरण</option>
+                            <option value="पोलीस भरती - सामान्य ज्ञान">पोलीस भरती - सामान्य ज्ञान व GK</option>
+                            <option value="पोलीस भरती - गणित व बुद्धिमत्ता">पोलीस भरती - गणित व बुद्धिमत्ता</option>
+                            <option value="तलाठी भरती - TCS पॅटर्न">तलाठी भरती - सराव संच</option>
+                            <option value="MPSC संयुक्त पूर्व परीक्षा">MPSC संयुक्त पूर्व परीक्षा</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">बरोबर उत्तर पर्याय (Correct Answer) *</label>
+                        <select name="correct_option" class="w-full p-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white font-bold text-emerald-700">
+                            <option value="A">पर्याय A (Option A)</option>
+                            <option value="B">पर्याय B (Option B)</option>
+                            <option value="C">पर्याय C (Option C)</option>
+                            <option value="D">पर्याय D (Option D)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Question Text -->
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">प्रश्न (Question Text) *</label>
+                    <textarea name="question" rows="2" required placeholder="उदा. महाराष्ट्राची उपराजधानी कोणती आहे?" class="w-full p-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+                </div>
+
+                <!-- 4 Options -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-semibold text-slate-600 mb-1">पर्याय A *</label>
+                        <input type="text" name="option_a" required placeholder="पर्याय A" class="w-full p-2 rounded-lg border border-slate-300">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-600 mb-1">पर्याय B *</label>
+                        <input type="text" name="option_b" required placeholder="पर्याय B" class="w-full p-2 rounded-lg border border-slate-300">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-600 mb-1">पर्याय C *</label>
+                        <input type="text" name="option_c" required placeholder="पर्याय C" class="w-full p-2 rounded-lg border border-slate-300">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-600 mb-1">पर्याय D *</label>
+                        <input type="text" name="option_d" required placeholder="पर्याय D" class="w-full p-2 rounded-lg border border-slate-300">
+                    </div>
+                </div>
+
+                <!-- Explanation -->
+                <div>
+                    <label class="block font-semibold text-slate-600 mb-1">स्पष्टीकरण (पर्यायी - Explanation)</label>
+                    <input type="text" name="explanation" placeholder="उत्तराचे थोडक्यात स्पष्टीकरण किंवा संदर्भ" class="w-full p-2 rounded-lg border border-slate-300">
+                </div>
+
+                <button type="submit" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-circle-check"></i> हा प्रश्न सेव्ह करा (Save Question)
+                </button>
+            </form>
+        </div>
+
+        <!-- SECTION 2: PDF Upload Section -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+            <div class="flex items-center gap-2 border-b border-slate-100 pb-3 mb-4">
+                <div class="w-8 h-8 rounded-lg bg-red-100 text-red-700 flex items-center justify-center text-sm font-bold">
+                    <i class="fa-solid fa-file-pdf"></i>
+                </div>
+                <div>
+                    <h2 class="text-sm font-bold text-slate-900">PDF नोट्स अपलोड करा (Upload PDF)</h2>
+                    <p class="text-[11px] text-slate-500">मोबाईलमधून थेट नवीन अभ्यास PDF फाईल जोडा</p>
+                </div>
+            </div>
+
+            <form method="POST" action="/admin/upload-pdf" enctype="multipart/form-data" class="space-y-3.5 text-xs">
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">व्यवस्थापक पासवर्ड *</label>
+                    <input type="password" name="admin_key" required placeholder="तुमचा ॲडमिन पासवर्ड" class="w-full p-2.5 rounded-xl border border-slate-300 bg-slate-50">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">PDF फाईल निवडा (.pdf) *</label>
+                    <input type="file" name="pdf_file" accept=".pdf" required class="w-full p-2 rounded-xl border border-slate-300 bg-white">
+                </div>
+                <button type="submit" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> PDF अपलोड करा (Upload Now)
+                </button>
+            </form>
+        </div>
+
+    </div>
+
+</body>
+              </html>
+                      
