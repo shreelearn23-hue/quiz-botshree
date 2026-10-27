@@ -9,26 +9,7 @@
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans min-h-screen p-3 md:p-6">
 
-    <!-- PASSWORD LOGIN GATE (Sirf ek baar password maangega) -->
-    <div id="loginGate" class="max-w-md mx-auto my-16 bg-white rounded-2xl p-6 shadow-xl border border-slate-200 text-center">
-        <div class="w-14 h-14 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-2xl mx-auto mb-3">
-            <i class="fa-solid fa-lock"></i>
-        </div>
-        <h2 class="text-base font-black text-slate-800">व्यवस्थापक नियंत्रण कक्ष (Admin Login)</h2>
-        <p class="text-xs text-slate-500 mt-1 mb-4">प्रवेश करण्यासाठी कृपया आपला पासवर्ड टाका</p>
-
-        <div class="space-y-3">
-            <input id="gatePassword" type="password" placeholder="पासवर्ड टाका (उदा. shree123)" class="w-full p-3 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-            <p id="gateError" class="text-xs text-rose-600 hidden font-bold">चुकीचा पासवर्ड! पुन्हा प्रयत्न करा.</p>
-            <button onclick="unlockPanel()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs shadow transition">
-                पॅनेल उघडा (Unlock Panel)
-            </button>
-            <a href="/" class="block text-xs text-slate-400 hover:text-slate-600 pt-2">मुख्य पृष्ठावर परत जा</a>
-        </div>
-    </div>
-
-    <!-- MAIN ADMIN PANEL (Screenshot Jaisa Same Interface) -->
-    <div id="adminMainContent" class="max-w-4xl mx-auto space-y-6 hidden">
+    <div class="max-w-4xl mx-auto space-y-6">
 
         <!-- Top Header -->
         <div class="bg-slate-900 text-white rounded-2xl p-5 shadow flex items-center justify-between border-b-4 border-indigo-600">
@@ -41,14 +22,9 @@
                     <p class="text-xs text-slate-400">JSON परीक्षा संच, PDF नोट्स, ऑडिओ आणि व्हिडिओ थेट व्यवस्थापित करा</p>
                 </div>
             </div>
-            <div class="flex items-center gap-2">
-                <button onclick="lockPanel()" class="text-xs bg-rose-600/20 text-rose-300 hover:bg-rose-600 hover:text-white px-3 py-2 rounded-xl font-bold transition">
-                    लॉगआउट
-                </button>
-                <a href="/" class="text-xs bg-slate-800 hover:bg-slate-700 px-3.5 py-2 rounded-xl border border-slate-700 font-bold transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-house"></i> मुख्य पृष्ठ
-                </a>
-            </div>
+            <a href="/" class="text-xs bg-slate-800 hover:bg-slate-700 px-3.5 py-2 rounded-xl border border-slate-700 font-bold transition flex items-center gap-1.5">
+                <i class="fa-solid fa-house"></i> मुख्य पृष्ठ
+            </a>
         </div>
 
         <!-- Alerts -->
@@ -103,21 +79,26 @@
             </div>
 
             <form method="POST" action="/admin/upload-json-exam" enctype="multipart/form-data" class="space-y-4 text-xs">
-                <input type="hidden" name="admin_key" class="autoAdminKey">
-                
-                <div>
-                    <label class="block font-bold text-slate-700 mb-1">ही परीक्षा कोणत्या विभागासाठी आहे? *</label>
-                    <select name="exam_category" class="w-full p-2.5 rounded-xl border border-slate-300 bg-white">
-                        <option value="police">गृह विभाग (महाराष्ट्र पोलीस भरती)</option>
-                        <option value="talathi">महसूल विभाग (तलाठी भरती)</option>
-                        <option value="mpsc">सामान्य प्रशासन (MPSC संयुक्त पूर्व)</option>
-                        <option value="general">दैनिक चालू घडामोडी व सराव</option>
-                    </select>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">ॲडमिन सिक्रेट पासवर्ड *</label>
+                        <input type="password" name="admin_key" required placeholder="shree123" class="w-full p-2.5 rounded-xl border border-slate-300 bg-slate-50">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">ही परीक्षा कोणत्या विभागासाठी आहे? *</label>
+                        <select name="exam_category" class="w-full p-2.5 rounded-xl border border-slate-300 bg-white">
+                            <option value="police">गृह विभाग (महाराष्ट्र पोलीस भरती)</option>
+                            <option value="talathi">महसूल विभाग (तलाठी भरती)</option>
+                            <option value="mpsc">सामान्य प्रशासन (MPSC संयुक्त पूर्व)</option>
+                            <option value="general">दैनिक चालू घडामोडी व सराव</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div>
                     <label class="block font-bold text-slate-700 mb-1">तयार JSON फाईल निवडा (.json) *</label>
                     <input type="file" name="exam_file" accept=".json" required class="w-full p-2.5 rounded-xl border-2 border-dashed border-indigo-300 bg-indigo-50/50">
+                    <p class="text-[10px] text-slate-500 mt-1">उदा. `police_bharti_100_pyq.json` किंवा `marathi_grammar_25.json`</p>
                 </div>
 
                 <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow transition flex items-center justify-center gap-2">
@@ -139,9 +120,11 @@
             </div>
 
             <form method="POST" action="/admin/upload-material" enctype="multipart/form-data" class="space-y-4 text-xs">
-                <input type="hidden" name="admin_key" class="autoAdminKey">
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">ॲडमिन पासवर्ड *</label>
+                        <input type="password" name="admin_key" required placeholder="shree123" class="w-full p-2.5 rounded-xl border border-slate-300 bg-slate-50">
+                    </div>
                     <div>
                         <label class="block font-bold text-slate-700 mb-1">विभाग निवडा *</label>
                         <select name="dept" class="w-full p-2.5 rounded-xl border border-slate-300 bg-white">
@@ -164,7 +147,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div>
                         <label class="block font-bold text-slate-700 mb-1">नोट्सचे शीर्षक (Title) *</label>
-                        <input type="text" name="title" required placeholder="उदा. मराठी व्याकरण संपूर्ण नोट्स" class="w-full p-2.5 rounded-xl border border-slate-300">
+                        <input type="text" name="title" required placeholder="उदा. मराठी व्याकरण वर्णमाला व संधी नोट्स" class="w-full p-2.5 rounded-xl border border-slate-300">
                     </div>
                     <div>
                         <label class="block font-bold text-slate-700 mb-1">PDF फाईल निवडा (.pdf) *</label>
@@ -186,14 +169,16 @@
                 </div>
                 <div>
                     <h2 class="text-sm md:text-base font-bold text-slate-900">३. ऑडिओ रिव्हिजन किंवा व्हिडिओ व्याख्यान जोडा</h2>
-                    <p class="text-[11px] text-slate-500">MP3 ऑडिओ फाईल किंवा व्हिडिओ लिंक जोडून होम पेजवर थेट चालवा</p>
+                    <p class="text-[11px] text-slate-500">MP3 ऑडिओ फाईल किंवा YouTube व्हिडिओ लिंक जोडून होम पेजवर थेट चालवा</p>
                 </div>
             </div>
 
             <form method="POST" action="/admin/add-media" enctype="multipart/form-data" class="space-y-4 text-xs">
-                <input type="hidden" name="admin_key" class="autoAdminKey">
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">ॲडमिन पासवर्ड *</label>
+                        <input type="password" name="admin_key" required placeholder="shree123" class="w-full p-2.5 rounded-xl border border-slate-300 bg-slate-50">
+                    </div>
                     <div>
                         <label class="block font-bold text-slate-700 mb-1">माध्यम प्रकार (Media Type) *</label>
                         <select name="media_type" class="w-full p-2.5 rounded-xl border border-slate-300 bg-white font-bold text-indigo-700">
@@ -214,11 +199,11 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div>
                         <label class="block font-bold text-slate-700 mb-1">व्याख्यान / ऑडिओ शीर्षक *</label>
-                        <input type="text" name="title" required placeholder="उदा. इतिहास महत्वाच्या लढाया" class="w-full p-2.5 rounded-xl border border-slate-300">
+                        <input type="text" name="title" required placeholder="उदा. इतिहास महत्वाच्या लढाया ऑडिओ" class="w-full p-2.5 rounded-xl border border-slate-300">
                     </div>
                     <div>
-                        <label class="block font-bold text-slate-700 mb-1">व्हिडिओ लिंक किंवा ऑडिओ फाईल</label>
-                        <input type="text" name="video_url" placeholder="YouTube URL उदा. https://..." class="w-full p-2 rounded-xl border border-slate-300 mb-1.5">
+                        <label class="block font-bold text-slate-700 mb-1">व्हिडिओ लिंक (URL) किंवा ऑडिओ फाईल</label>
+                        <input type="text" name="video_url" placeholder="YouTube URL उदा. https://youtube.com/watch?v=..." class="w-full p-2 rounded-xl border border-slate-300 mb-1.5">
                         <input type="file" name="audio_file" accept=".mp3,.m4a,.wav" class="w-full p-1.5 rounded-xl border border-slate-300 bg-white text-[11px]">
                     </div>
                 </div>
@@ -231,49 +216,5 @@
 
     </div>
 
-    <!-- Script to Handle One-Time Password Login -->
-    <script>
-        const REAL_KEY = "shree123";
-
-        function checkExistingSession() {
-            const saved = sessionStorage.getItem('admin_authenticated');
-            if (saved === 'true') {
-                showPanel();
-            }
-        }
-
-        function unlockPanel() {
-            const pwd = document.getElementById('gatePassword').value.trim();
-            if (pwd === REAL_KEY) {
-                sessionStorage.setItem('admin_authenticated', 'true');
-                showPanel();
-            } else {
-                document.getElementById('gateError').classList.remove('hidden');
-            }
-        }
-
-        function showPanel() {
-            document.getElementById('loginGate').classList.add('hidden');
-            document.getElementById('adminMainContent').classList.remove('hidden');
-            // Auto fill all hidden admin key inputs
-            document.querySelectorAll('.autoAdminKey').forEach(input => {
-                input.value = REAL_KEY;
-            });
-        }
-
-        function lockPanel() {
-            sessionStorage.removeItem('admin_authenticated');
-            location.reload();
-        }
-
-        document.getElementById('gatePassword').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') unlockPanel();
-        });
-
-        checkExistingSession();
-    </script>
-
-</body>
-</html>
 </body>
 </html>
