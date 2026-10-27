@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>श्री लर्न (ShreeLearn) - महाराष्ट्र स्पर्धा परीक्षा डिजिटल सराव व मार्गदर्शन केंद्र</title>
+    <title>श्री लर्न (ShreeLearn) - महाराष्ट्र स्पर्धा परीक्षा अभ्यास व CBT सराव मंच</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -12,50 +12,45 @@
             height: 3px;
         }
         .portal-gradient {
-            background: linear-gradient(135deg, #091124 0%, #172554 50%, #1e1b4b 100%);
+            background: linear-gradient(135deg, #0b1329 0%, #172554 55%, #1e1b4b 100%);
         }
-        .card-hover:hover {
+        .custom-card {
+            transition: all 0.25s ease;
+        }
+        .custom-card:hover {
             transform: translateY(-3px);
-            box-shadow: 0 12px 24px -10px rgba(15, 23, 42, 0.12);
+            box-shadow: 0 12px 24px -10px rgba(15, 23, 42, 0.15);
         }
-        /* Maharashtra Map Watermark Background */
-        .mh-map-bg {
-            position: relative;
+        /* Pulse dot */
+        .pulse-live {
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            animation: pulse-ring 1.8s infinite cubic-bezier(0.66, 0, 0, 1);
         }
-        .mh-map-bg::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600' opacity='0.04'%3E%3Cpath fill='%231e3a8a' d='M180,120 L280,100 L380,110 L520,130 L640,190 L710,240 L690,320 L610,380 L520,440 L430,490 L340,470 L250,510 L210,430 L220,340 L170,260 L160,180 Z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: center 20%;
-            background-size: 650px;
-            pointer-events: none;
-            z-index: 0;
+        @keyframes pulse-ring {
+            to { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans flex flex-col min-h-screen mh-map-bg">
+<body class="bg-slate-100 text-slate-800 font-sans flex flex-col min-h-screen">
 
-    <!-- Top Tricolor Border -->
+    <!-- Top Tricolor Ribbon -->
     <div class="tricolor-strip"></div>
 
-    <!-- Official Style Notification Bar -->
-    <div class="bg-slate-900 text-slate-300 text-[11px] px-4 py-1.5 flex items-center justify-between border-b border-slate-800 relative z-10">
+    <!-- Government Portal Style Notification Bar -->
+    <div class="bg-slate-900 text-slate-300 text-[11px] px-4 py-1.5 flex items-center justify-between border-b border-slate-800">
         <div class="flex items-center gap-2">
-            <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span class="font-medium">महाराष्ट्र स्पर्धा परीक्षा डिजिटल सराव व शैक्षणिक मार्गदर्शन केंद्र</span>
+            <span class="w-2 h-2 rounded-full bg-emerald-400 pulse-live"></span>
+            <span class="font-medium">महाराष्ट्र स्पर्धा परीक्षा डिजिटल अभ्यास व कौशल्य चाचणी मंच</span>
         </div>
-        <div class="hidden sm:flex items-center gap-4 text-slate-400">
-            <span><i class="fa-solid fa-graduation-cap text-amber-400 mr-1"></i> ऑडिओ नोट्स व व्हिडिओ लेक्चर्स</span>
-            <span><i class="fa-solid fa-shield-halved text-emerald-400 mr-1"></i> १००% जाहिरात विरहित अभ्यास</span>
+        <div class="hidden md:flex items-center gap-4 text-slate-400">
+            <span><i class="fa-solid fa-file-shield text-amber-400 mr-1"></i> १००% सुरक्षित व जाहिरात मुक्त</span>
+            <span><i class="fa-solid fa-clock text-emerald-400 mr-1"></i> वेळ व्यवस्थापन सराव</span>
         </div>
     </div>
 
     <!-- Header Navigation -->
-    <header class="bg-white/95 backdrop-blur border-b border-slate-200 sticky top-0 z-40 shadow-sm relative">
-        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-            <!-- Brand Logo -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
             <a href="/" class="flex items-center gap-2.5">
                 <div class="w-10 h-10 rounded-xl bg-indigo-700 text-white flex items-center justify-center font-black text-xl shadow-md border-2 border-indigo-500">
                     श्री
@@ -63,328 +58,310 @@
                 <div>
                     <div class="text-lg md:text-xl font-black text-slate-900 tracking-tight leading-tight flex items-center gap-1.5">
                         श्री लर्न
-                        <span class="bg-indigo-100 text-indigo-700 text-[10px] font-bold px-1.5 py-0.5 rounded">स्मार्ट सराव केंद्र</span>
+                        <span class="bg-indigo-100 text-indigo-700 text-[10px] font-bold px-1.5 py-0.5 rounded">CBT HUB</span>
                     </div>
-                    <div class="text-[10px] text-slate-500 font-medium">Maharashtra Online Learning & CBT Portal</div>
+                    <div class="text-[10px] text-slate-500 font-medium">Maharashtra State Learning & Test Series</div>
                 </div>
             </a>
 
-            <!-- Quick Action Button -->
-            <a href="/exam" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs md:text-sm font-bold px-4 py-2 rounded-lg shadow-sm transition flex items-center gap-1.5">
-                <i class="fa-solid fa-laptop-code"></i>
-                <span>थेट सराव परीक्षा</span>
-            </a>
+            <div class="flex items-center gap-2">
+                <a href="/exam" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs md:text-sm font-bold px-4 py-2 rounded-lg shadow transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-play"></i>
+                    <span>थेट परीक्षा दालन</span>
+                </a>
+            </div>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="portal-gradient text-white py-12 md:py-16 px-4 relative overflow-hidden">
-        <div class="max-w-4xl mx-auto text-center relative z-10">
+    <!-- Hero Banner with Maharashtra State Identity -->
+    <section class="portal-gradient text-white py-8 md:py-12 px-4 relative overflow-hidden">
+        <div class="max-w-6xl mx-auto text-center relative z-10">
             <span class="bg-indigo-500/20 text-indigo-200 border border-indigo-400/30 text-xs px-3.5 py-1.5 rounded-full font-semibold inline-block mb-3">
-                महाराष्ट्र राज्य • संपूर्ण विषयनिहाय ई-लर्निंग व CBT सराव
+                महाराष्ट्र शासन भरती पूर्वतयारी • मोफत व परिपूर्ण अभ्यास केंद्र
             </span>
-            <h1 class="text-2xl md:text-4xl font-black tracking-tight leading-snug">
-                एकाच मंचावर परिपूर्ण सराव आणि परीक्षा!<br>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-200 to-indigo-200">
-                    PDF नोट्स • ऑडिओ रिव्हिजन • व्हिडिओ व्याख्याने • CBT चाचण्या
-                </span>
+            <h1 class="text-xl md:text-3xl font-black tracking-tight">
+                अभ्यास साहित्य, ऑडिओ रिव्हिजन आणि विभागनिहाय CBT सराव चाचण्या
             </h1>
-            <p class="text-xs md:text-sm text-slate-300 max-w-2xl mx-auto mt-3 leading-relaxed">
-                प्रथम विषय समजून घ्या, प्रवासात ऑडिओ रिव्हिजन ऐका, शिक्षकांचे व्याख्यान पहा आणि लगेच त्याच विषयाची ऑनलाइन CBT टेस्ट सोडवून निकाल तपासा.
+            <p class="text-xs md:text-sm text-slate-300 max-w-2xl mx-auto mt-2 leading-relaxed">
+                एकाच मंचावर सर्व विषयांच्या PDF नोट्स डाऊनलोड करा, ऑडिओ आणि व्हिडिओ लेक्चर्सद्वारे समजून घ्या, आणि लगेच ऑनलाइन टेस्ट सोडवा.
             </p>
-
-            <div class="mt-7 flex flex-wrap justify-center gap-3">
-                <a href="#departments" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold px-5 py-2.5 rounded-xl shadow-md transition text-xs md:text-sm flex items-center gap-2">
-                    <i class="fa-solid fa-book-open"></i> विभागनिहाय अभ्यासक्रम पहा
-                </a>
-                <a href="/exam" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-5 py-2.5 rounded-xl shadow-md transition text-xs md:text-sm flex items-center gap-2">
-                    <i class="fa-solid fa-play"></i> थेट १०० प्रश्न CBT चाचणी
-                </a>
-            </div>
         </div>
     </section>
 
-    <!-- Quick Stats -->
-    <section class="max-w-5xl mx-auto px-4 -mt-6 relative z-20">
-        <div class="bg-white rounded-2xl shadow-md border border-slate-200 grid grid-cols-2 sm:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-slate-100 p-3">
-            <div class="text-center py-2">
-                <div class="text-lg md:text-xl font-black text-indigo-700">४-इन-१</div>
-                <div class="text-[11px] font-bold text-slate-500">PDF + ऑडिओ + व्हिडिओ + CBT</div>
-            </div>
-            <div class="text-center py-2">
-                <div class="text-lg md:text-xl font-black text-emerald-600">१००+ प्रश्न</div>
-                <div class="text-[11px] font-bold text-slate-500">मागील वर्षांच्या प्रश्नपत्रिका</div>
-            </div>
-            <div class="text-center py-2">
-                <div class="text-lg md:text-xl font-black text-amber-500">६० सेकंद</div>
-                <div class="text-[11px] font-bold text-slate-500">परीक्षा वेळेचे काटेकोर भान</div>
-            </div>
-            <div class="text-center py-2">
-                <div class="text-lg md:text-xl font-black text-sky-600">०% ॲड्स</div>
-                <div class="text-[11px] font-bold text-slate-500">विना व्यत्यय अभ्यास</div>
-            </div>
-        </div>
-    </section>
+    <!-- Central Interactive Workspace (Left: Material, Center: Maharashtra Map, Right: CBT Tests) -->
+    <main class="max-w-7xl mx-auto px-4 py-8 flex-1 w-full">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
-    <!-- Main Content: Department & Subject-wise Hub -->
-    <main id="departments" class="max-w-6xl mx-auto px-4 py-12 flex-1 relative z-10">
-        <div class="text-center mb-10">
-            <h2 class="text-xl md:text-3xl font-black text-slate-800 tracking-tight">विभागनिहाय अभ्यासक्रम व सराव दालन</h2>
-            <p class="text-xs md:text-sm text-slate-500 mt-1">विषय निवडा ➔ नोट्स वाचा किंवा ऑडिओ/व्हिडिओ पहा ➔ लगेच CBT सराव करा</p>
-        </div>
-
-        <div class="space-y-8">
-
-            <!-- DEPARTMENT 1: गृह विभाग (महाराष्ट्र पोलीस भरती) -->
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                <div class="bg-amber-500 text-white px-5 py-3.5 flex flex-wrap items-center justify-between gap-2">
-                    <div class="flex items-center gap-3">
-                        <div class="w-9 h-9 rounded-lg bg-white/20 flex items-center justify-center text-lg">
-                            <i class="fa-solid fa-shield-halved"></i>
+            <!-- LEFT COLUMN: Study Materials, Books, Audio & Video (lg:col-span-4) -->
+            <div class="lg:col-span-4 space-y-4">
+                <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
+                    <div class="flex items-center gap-2 border-b border-slate-100 pb-3 mb-3">
+                        <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center text-sm font-bold">
+                            <i class="fa-solid fa-book-open"></i>
                         </div>
                         <div>
-                            <h3 class="font-extrabold text-sm md:text-base tracking-wide">गृह विभाग • महाराष्ट्र पोलीस भरती विशेष दालन</h3>
-                            <p class="text-[11px] text-amber-100">पोलीस शिपाई, चालक, SRPF व बँड्समन परीक्षा पूर्वतयारी</p>
+                            <h2 class="font-bold text-sm text-slate-800">अभ्यास साहित्य व लेक्चर्स</h2>
+                            <p class="text-[11px] text-slate-500">PDF, ऑडिओ आणि व्हिडिओ मार्गदर्शन</p>
                         </div>
                     </div>
-                    <span class="bg-amber-600/60 text-amber-100 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">
-                        १०० गुणांचा अभ्यासक्रम
+
+                    <!-- Material Card 1: Marathi Grammar -->
+                    <div class="bg-slate-50 rounded-xl p-3 border border-slate-200 mb-3">
+                        <div class="flex items-center justify-between mb-1.5">
+                            <span class="text-xs font-bold text-slate-800">मराठी व्याकरण हस्तलिखित नोट्स</span>
+                            <span class="text-[10px] bg-red-100 text-red-700 font-semibold px-2 py-0.5 rounded">PDF + ऑडिओ</span>
+                        </div>
+                        <p class="text-[11px] text-slate-600 mb-2.5">
+                            वर्णमाला, संधी, समास, विभक्ती व महत्त्वाच्या म्हणींचा संक्षिप्त संग्रह.
+                        </p>
+                        <div class="grid grid-cols-3 gap-1.5 text-center">
+                            <button onclick="openResourceModal('PDF', 'मराठी व्याकरण संक्षिप्त नोट्स')" class="bg-white hover:bg-red-50 text-slate-700 border border-slate-200 text-[11px] font-semibold py-1.5 rounded-lg transition flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-file-pdf text-red-500"></i> PDF
+                            </button>
+                            <button onclick="openResourceModal('AUDIO', 'मराठी व्याकरण - जलद ऑडिओ उजळणी')" class="bg-white hover:bg-indigo-50 text-slate-700 border border-slate-200 text-[11px] font-semibold py-1.5 rounded-lg transition flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-headphones text-indigo-600"></i> ऑडिओ
+                            </button>
+                            <button onclick="openResourceModal('VIDEO', 'मराठी व्याकरण व्हिडिओ लेक्चर')" class="bg-white hover:bg-purple-50 text-slate-700 border border-slate-200 text-[11px] font-semibold py-1.5 rounded-lg transition flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-play text-purple-600"></i> व्हिडिओ
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Material Card 2: Maharashtra GK & Geography -->
+                    <div class="bg-slate-50 rounded-xl p-3 border border-slate-200 mb-3">
+                        <div class="flex items-center justify-between mb-1.5">
+                            <span class="text-xs font-bold text-slate-800">महाराष्ट्र भूगोल व इतिहास GK</span>
+                            <span class="text-[10px] bg-indigo-100 text-indigo-700 font-semibold px-2 py-0.5 rounded">रिव्हिजन पॅक</span>
+                        </div>
+                        <p class="text-[11px] text-slate-600 mb-2.5">
+                            नद्यांची खोरी, किल्ले, प्रशासकीय विभाग आणि समाजसुधारकांचे कार्य.
+                        </p>
+                        <div class="grid grid-cols-3 gap-1.5 text-center">
+                            <button onclick="openResourceModal('PDF', 'महाराष्ट्र भूगोल व इतिहास संपूर्ण GK')" class="bg-white hover:bg-red-50 text-slate-700 border border-slate-200 text-[11px] font-semibold py-1.5 rounded-lg transition flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-file-pdf text-red-500"></i> PDF
+                            </button>
+                            <button onclick="openResourceModal('AUDIO', 'महाराष्ट्र इतिहास व भूगोल ऑडिओ रिव्हिजन')" class="bg-white hover:bg-indigo-50 text-slate-700 border border-slate-200 text-[11px] font-semibold py-1.5 rounded-lg transition flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-headphones text-indigo-600"></i> ऑडिओ
+                            </button>
+                            <button onclick="openResourceModal('VIDEO', 'महाराष्ट्र भूगोल व्हिडिओ लेक्चर')" class="bg-white hover:bg-purple-50 text-slate-700 border border-slate-200 text-[11px] font-semibold py-1.5 rounded-lg transition flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-play text-purple-600"></i> व्हिडिओ
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Material Card 3: Maths & Intelligence Reasoning -->
+                    <div class="bg-slate-50 rounded-xl p-3 border border-slate-200">
+                        <div class="flex items-center justify-between mb-1.5">
+                            <span class="text-xs font-bold text-slate-800">अंकगणित व बुद्धिमत्ता ट्रिक्स</span>
+                            <span class="text-[10px] bg-emerald-100 text-emerald-700 font-semibold px-2 py-0.5 rounded">शॉर्टकट फॉर्म्युला</span>
+                        </div>
+                        <p class="text-[11px] text-slate-600 mb-2.5">
+                            कमी वेळेत अचूक उत्तर काढण्याच्या युक्त्या आणि सूत्रांची यादी.
+                        </p>
+                        <div class="grid grid-cols-3 gap-1.5 text-center">
+                            <button onclick="openResourceModal('PDF', 'गणित व बुद्धिमत्ता शॉर्टकट सूत्रे PDF')" class="bg-white hover:bg-red-50 text-slate-700 border border-slate-200 text-[11px] font-semibold py-1.5 rounded-lg transition flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-file-pdf text-red-500"></i> PDF
+                            </button>
+                            <button onclick="openResourceModal('AUDIO', 'गणित संकल्पना स्पष्टीकरण ऑडिओ')" class="bg-white hover:bg-indigo-50 text-slate-700 border border-slate-200 text-[11px] font-semibold py-1.5 rounded-lg transition flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-headphones text-indigo-600"></i> ऑडिओ
+                            </button>
+                            <button onclick="openResourceModal('VIDEO', 'अंकगणित शॉर्टकट ट्रिक्स व्हिडिओ लेक्चर')" class="bg-white hover:bg-purple-50 text-slate-700 border border-slate-200 text-[11px] font-semibold py-1.5 rounded-lg transition flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-play text-purple-600"></i> व्हिडिओ
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- CENTER COLUMN: Maharashtra Authentic Map & Hub Identity (lg:col-span-4) -->
+            <div class="lg:col-span-4 space-y-4">
+                <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm text-center">
+                    <span class="text-[11px] font-bold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full uppercase tracking-wider inline-block mb-3">
+                        महाराष्ट्र राज्य कार्यक्षेत्र
                     </span>
+                    <h3 class="text-sm font-extrabold text-slate-800">सर्व ३६ जिल्ह्यांसाठी उपयुक्त</h3>
+                    <p class="text-[11px] text-slate-500 mt-1">कोकण, पुणे, नाशिक, छत्रपती संभाजीनगर, अमरावती आणि नागपूर विभाग</p>
+
+                    <!-- SVG Maharashtra Map Illustration (Clear, Unique & Free) -->
+                    <div class="my-4 py-2 flex items-center justify-center">
+                        <svg class="w-full max-w-[280px] h-auto drop-shadow-md" viewBox="0 0 500 420" xmlns="http://www.w3.org/2000/svg">
+                            <!-- State Outline Path -->
+                            <path d="M 120,45 C 165,30 220,40 270,35 C 320,30 380,45 425,75 C 455,95 480,130 470,170 C 460,210 420,240 395,275 C 370,310 330,350 280,380 C 240,405 195,385 160,355 C 130,330 115,280 110,240 C 105,190 90,140 100,90 Z" 
+                                  fill="#1e3a8a" stroke="#f59e0b" stroke-width="4" stroke-linejoin="round"/>
+                            
+                            <!-- Internal Regional Boundaries / Ribbons -->
+                            <path d="M 120,150 Q 220,180 320,160" stroke="#ffffff" stroke-width="2" stroke-dasharray="4 4" fill="none" opacity="0.6"/>
+                            <path d="M 230,175 Q 260,270 280,380" stroke="#ffffff" stroke-width="2" stroke-dasharray="4 4" fill="none" opacity="0.6"/>
+                            <path d="M 270,35 Q 280,160 395,275" stroke="#ffffff" stroke-width="2" stroke-dasharray="4 4" fill="none" opacity="0.6"/>
+
+                            <!-- Center Maharashtra Symbol Badge -->
+                            <circle cx="260" cy="195" r="42" fill="#ffffff" stroke="#1e3a8a" stroke-width="3"/>
+                            <text x="260" y="190" font-size="16" font-weight="900" text-anchor="middle" fill="#1e3a8a" font-family="sans-serif">श्री लर्न</text>
+                            <text x="260" y="208" font-size="9" font-weight="700" text-anchor="middle" fill="#f59e0b" font-family="sans-serif">महाराष्ट्र</text>
+
+                            <!-- Key Division Indicators -->
+                            <circle cx="135" cy="180" r="4" fill="#f59e0b"/>
+                            <text x="145" y="184" font-size="10" font-weight="bold" fill="#ffffff">मुंबई/कोकण</text>
+
+                            <circle cx="210" cy="240" r="4" fill="#f59e0b"/>
+                            <text x="220" y="244" font-size="10" font-weight="bold" fill="#ffffff">पुणे</text>
+
+                            <circle cx="250" cy="130" r="4" fill="#f59e0b"/>
+                            <text x="260" y="134" font-size="10" font-weight="bold" fill="#ffffff">छ. संभाजीनगर</text>
+
+                            <circle cx="410" cy="120" r="4" fill="#f59e0b"/>
+                            <text x="375" y="105" font-size="10" font-weight="bold" fill="#ffffff">नागपूर/विदर्भ</text>
+                        </svg>
+                    </div>
+
+                    <!-- Highlight Badges -->
+                    <div class="grid grid-cols-2 gap-2 text-left mt-2">
+                        <div class="bg-slate-50 p-2 rounded-xl border border-slate-100">
+                            <div class="text-[10px] text-slate-500 font-medium">एकूण जिल्हे</div>
+                            <div class="text-sm font-bold text-slate-800">३६ जिल्हे कव्हर</div>
+                        </div>
+                        <div class="bg-slate-50 p-2 rounded-xl border border-slate-100">
+                            <div class="text-[10px] text-slate-500 font-medium">सराव शुल्क</div>
+                            <div class="text-sm font-bold text-emerald-600">१००% मोफत (Free)</div>
+                        </div>
+                    </div>
                 </div>
+            </div>
 
-                <div class="p-5 divide-y divide-slate-100">
-
-                    <!-- Marathi Grammar -->
-                    <div class="py-4 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
-                        <div class="flex-1">
-                            <div class="flex items-center gap-2">
-                                <span class="w-2 h-2 rounded-full bg-amber-500"></span>
-                                <h4 class="font-bold text-slate-800 text-sm md:text-base">मराठी व्याकरण व शब्दसंग्रह (२५ गुण)</h4>
-                                <span class="text-[10px] bg-slate-100 text-slate-600 font-semibold px-2 py-0.5 rounded">वर्णमाला, संधी, समास, काळ</span>
-                            </div>
-                            <p class="text-xs text-slate-500 mt-1 pl-4">
-                                पोलीस भरतीला वारंवार विचारले जाणारे नियम, समानार्थी-विरुद्धार्थी शब्द आणि म्हणी.
-                            </p>
+            <!-- RIGHT COLUMN: Department-Wise CBT Tests & PYQ Series (lg:col-span-4) -->
+            <div class="lg:col-span-4 space-y-4">
+                <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
+                    <div class="flex items-center gap-2 border-b border-slate-100 pb-3 mb-3">
+                        <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-sm font-bold">
+                            <i class="fa-solid fa-laptop-code"></i>
                         </div>
+                        <div>
+                            <h2 class="font-bold text-sm text-slate-800">विभागनिहाय CBT चाचण्या (PYQ)</h2>
+                            <p class="text-[11px] text-slate-500">मागील वर्षांचे प्रश्न व सराव पेपर्स</p>
+                        </div>
+                    </div>
 
-                        <div class="flex flex-wrap items-center gap-2 pl-4 lg:pl-0">
-                            <button onclick="openResourceModal('PDF', 'मराठी व्याकरण संपूर्ण हस्तलिखित नोट्स')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3 py-1.5 rounded-lg transition flex items-center gap-1.5">
-                                <i class="fa-solid fa-file-pdf text-red-500"></i> PDF नोट्स
-                            </button>
-                            <button onclick="openResourceModal('AUDIO', 'मराठी व्याकरण - जलद ऑडिओ रिव्हिजन (१० मिनिटे)')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3 py-1.5 rounded-lg transition flex items-center gap-1.5">
-                                <i class="fa-solid fa-headphones text-indigo-500"></i> ऑडिओ ट्रॅक
-                            </button>
-                            <button onclick="openResourceModal('VIDEO', 'व्हिडिओ व्याख्यान - मराठी व्याकरण महत्वाचे नियम')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3 py-1.5 rounded-lg transition flex items-center gap-1.5">
-                                <i class="fa-solid fa-video text-purple-600"></i> व्हिडिओ मार्गदर्शन
-                            </button>
-                            <a href="/exam" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3.5 py-1.5 rounded-lg shadow-sm transition flex items-center gap-1.5">
-                                <i class="fa-solid fa-pen-nib"></i> २५ प्रश्न CBT टेस्ट
+                    <!-- Department 1: Police Bharti PYQ -->
+                    <div class="bg-amber-50/60 rounded-xl p-3 border border-amber-200 mb-3">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-xs font-bold text-slate-900 flex items-center gap-1">
+                                <i class="fa-solid fa-shield-halved text-amber-600"></i> गृह विभाग • पोलीस भरती
+                            </span>
+                            <span class="text-[10px] bg-amber-200 text-amber-800 font-bold px-1.5 py-0.5 rounded">PYQ</span>
+                        </div>
+                        <p class="text-[11px] text-slate-600 mb-2">
+                            पोलीस शिपाई व चालक पदांसाठी १०० प्रश्नांचा संपूर्ण सराव संच.
+                        </p>
+                        <div class="flex items-center gap-2">
+                            <a href="/exam" class="flex-1 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold py-1.5 rounded-lg text-center shadow-sm transition">
+                                १०० प्रश्न टेस्ट सुरू करा
                             </a>
                         </div>
                     </div>
 
-                    <!-- GK & Current Affairs -->
-                    <div class="py-4 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
-                        <div class="flex-1">
-                            <div class="flex items-center gap-2">
-                                <span class="w-2 h-2 rounded-full bg-amber-500"></span>
-                                <h4 class="font-bold text-slate-800 text-sm md:text-base">सामान्य ज्ञान व चालू घडामोडी (२५ गुण)</h4>
-                                <span class="text-[10px] bg-slate-100 text-slate-600 font-semibold px-2 py-0.5 rounded">महाराष्ट्र भूगोल, इतिहास, पोलीस प्रशासन</span>
-                            </div>
-                            <p class="text-xs text-slate-500 mt-1 pl-4">
-                                महाराष्ट्राचा भूगोल, समाजसुधारक, चालू घडामोडी आणि पोलीस प्रशासन मूलभूत माहिती.
-                            </p>
+                    <!-- Department 2: Talathi & Revenue -->
+                    <div class="bg-emerald-50/60 rounded-xl p-3 border border-emerald-200 mb-3">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-xs font-bold text-slate-900 flex items-center gap-1">
+                                <i class="fa-solid fa-seedling text-emerald-600"></i> महसूल विभाग • तलाठी भरती
+                            </span>
+                            <span class="text-[10px] bg-emerald-200 text-emerald-800 font-bold px-1.5 py-0.5 rounded">नवा पॅटर्न</span>
                         </div>
-
-                        <div class="flex flex-wrap items-center gap-2 pl-4 lg:pl-0">
-                            <button onclick="openResourceModal('PDF', 'सामान्य ज्ञान व महाराष्ट्र विशेष नोट्स')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3 py-1.5 rounded-lg transition flex items-center gap-1.5">
-                                <i class="fa-solid fa-file-pdf text-red-500"></i> PDF नोट्स
-                            </button>
-                            <button onclick="openResourceModal('AUDIO', 'चालू घडामोडी - महत्त्वाचे मुद्दे ऑडिओ')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3 py-1.5 rounded-lg transition flex items-center gap-1.5">
-                                <i class="fa-solid fa-headphones text-indigo-500"></i> ऑडिओ ट्रॅक
-                            </button>
-                            <button onclick="openResourceModal('VIDEO', 'व्हिडिओ व्याख्यान - महाराष्ट्र भूगोल व पोलीस प्रशासन')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3 py-1.5 rounded-lg transition flex items-center gap-1.5">
-                                <i class="fa-solid fa-video text-purple-600"></i> व्हिडिओ मार्गदर्शन
-                            </button>
-                            <a href="/exam" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3.5 py-1.5 rounded-lg shadow-sm transition flex items-center gap-1.5">
-                                <i class="fa-solid fa-pen-nib"></i> २५ प्रश्न CBT टेस्ट
+                        <p class="text-[11px] text-slate-600 mb-2">
+                            मराठी, इंग्रजी, सामान्य ज्ञान व बौद्धिक चाचणी संयुक्त संच.
+                        </p>
+                        <div class="flex items-center gap-2">
+                            <a href="/exam" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-1.5 rounded-lg text-center shadow-sm transition">
+                                सराव टेस्ट सुरू करा
                             </a>
                         </div>
                     </div>
 
-                    <!-- Maths & Reasoning -->
-                    <div class="py-4 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
-                        <div class="flex-1">
-                            <div class="flex items-center gap-2">
-                                <span class="w-2 h-2 rounded-full bg-amber-500"></span>
-                                <h4 class="font-bold text-slate-800 text-sm md:text-base">अंकगणित व बुद्धिमत्ता चाचणी (५० गुण)</h4>
-                                <span class="text-[10px] bg-slate-100 text-slate-600 font-semibold px-2 py-0.5 rounded">शॉर्टकट युक्त्या, संख्या मालिका, तर्क</span>
-                            </div>
-                            <p class="text-xs text-slate-500 mt-1 pl-4">
-                                जलद वेळेत गणित सोडवण्याच्या शॉर्टकट ट्रिक्स आणि लॉजिकल रिझनिंग प्रश्नसंच.
-                            </p>
+                    <!-- Department 3: MPSC Group C / B -->
+                    <div class="bg-indigo-50/60 rounded-xl p-3 border border-indigo-200">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-xs font-bold text-slate-900 flex items-center gap-1">
+                                <i class="fa-solid fa-building-columns text-indigo-600"></i> सामान्य प्रशासन • MPSC संयुक्त
+                            </span>
+                            <span class="text-[10px] bg-indigo-200 text-indigo-800 font-bold px-1.5 py-0.5 rounded">गट-क / गट-ब</span>
                         </div>
-
-                        <div class="flex flex-wrap items-center gap-2 pl-4 lg:pl-0">
-                            <button onclick="openResourceModal('PDF', 'अंकगणित सूत्रे व शॉर्टकट ट्रिक्स PDF')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3 py-1.5 rounded-lg transition flex items-center gap-1.5">
-                                <i class="fa-solid fa-file-pdf text-red-500"></i> PDF नोट्स
-                            </button>
-                            <button onclick="openResourceModal('AUDIO', 'बुद्धिमत्ता संकल्पना - ऑडिओ मार्गदर्शन')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3 py-1.5 rounded-lg transition flex items-center gap-1.5">
-                                <i class="fa-solid fa-headphones text-indigo-500"></i> ऑडिओ ट्रॅक
-                            </button>
-                            <button onclick="openResourceModal('VIDEO', 'व्हिडिओ व्याख्यान - वेळेची बचत करणाऱ्या गणित ट्रिक्स')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3 py-1.5 rounded-lg transition flex items-center gap-1.5">
-                                <i class="fa-solid fa-video text-purple-600"></i> व्हिडिओ मार्गदर्शन
-                            </button>
-                            <a href="/exam" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3.5 py-1.5 rounded-lg shadow-sm transition flex items-center gap-1.5">
-                                <i class="fa-solid fa-pen-nib"></i> ५० प्रश्न CBT टेस्ट
+                        <p class="text-[11px] text-slate-600 mb-2">
+                            राज्यघटना, विज्ञान, आधुनिक इतिहास आणि चालू घडामोडी सराव.
+                        </p>
+                        <div class="flex items-center gap-2">
+                            <a href="/exam" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-1.5 rounded-lg text-center shadow-sm transition">
+                                MPSC टेस्ट सुरू करा
                             </a>
                         </div>
                     </div>
 
                 </div>
+            </div>
 
-                <div class="bg-amber-50/70 p-4 border-t border-amber-100 flex flex-col sm:flex-row items-center justify-between gap-3">
-                    <div class="text-xs text-slate-700 flex items-center gap-2">
-                        <i class="fa-solid fa-star text-amber-500"></i>
-                        <span><strong>संपूर्ण पोलीस भरती पॅटर्न:</strong> १०० प्रश्न • १०० गुण • ९० मिनिटांची परिपूर्ण टेस्ट सोडवा.</span>
+        </div>
+
+        <!-- BOTTOM SECTION: Telegram Community & Daily Updates (Red Marking) -->
+        <div class="mt-8 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-2xl p-6 shadow-md border border-slate-800">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex items-center gap-4 text-center md:text-left">
+                    <div class="w-14 h-14 rounded-2xl bg-sky-500/20 text-sky-400 border border-sky-400/30 flex items-center justify-center text-3xl shrink-0">
+                        <i class="fa-brands fa-telegram"></i>
                     </div>
-                    <a href="/exam" class="bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold px-4 py-2 rounded-lg shadow transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-fire"></i> १०० प्रश्न संपूर्ण मॉक टेस्ट द्या
+                    <div>
+                        <h3 class="text-base md:text-lg font-bold">आमच्या अधिकृत टेलिग्राम क्विझ ग्रुपमध्ये सामील व्हा</h3>
+                        <p class="text-xs text-slate-300 mt-1">
+                            दररोज नवीन चालू घडामोडींचे प्रश्न, सराव पोल (Polls), PDF अभ्यासनोट्स आणि परीक्षा सूचना थेट मिळवा.
+                        </p>
+                    </div>
+                </div>
+                <div class="shrink-0 flex items-center gap-3">
+                    <a href="https://t.me" target="_blank" class="bg-sky-500 hover:bg-sky-600 text-white font-bold px-5 py-2.5 rounded-xl shadow transition text-xs md:text-sm flex items-center gap-2">
+                        <i class="fa-brands fa-telegram text-base"></i>
+                        <span>टेलिग्राम ग्रुप जॉईन करा</span>
+                    </a>
+                    <a href="/exam" class="bg-white/10 hover:bg-white/20 text-white font-semibold px-4 py-2.5 rounded-xl transition text-xs md:text-sm">
+                        CBT पोर्टल
                     </a>
                 </div>
             </div>
-
-            <!-- DEPARTMENT 2: महसूल व भूमी अभिलेख (तलाठी भरती) -->
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                <div class="bg-emerald-600 text-white px-5 py-3.5 flex flex-wrap items-center justify-between gap-2">
-                    <div class="flex items-center gap-3">
-                        <div class="w-9 h-9 rounded-lg bg-white/20 flex items-center justify-center text-lg">
-                            <i class="fa-solid fa-seedling"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-extrabold text-sm md:text-base tracking-wide">महसूल विभाग • तलाठी व मंडळ अधिकारी सराव दालन</h3>
-                            <p class="text-[11px] text-emerald-100">नवीनतम परीक्षा अभ्यासक्रमावर आधारित ऑनलाइन सराव संच</p>
-                        </div>
-                    </div>
-                    <span class="bg-emerald-700/60 text-emerald-100 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">
-                        नवीनतम अभ्यासक्रम
-                    </span>
-                </div>
-
-                <div class="p-5 divide-y divide-slate-100">
-                    <div class="py-4 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
-                        <div class="flex-1">
-                            <div class="flex items-center gap-2">
-                                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                                <h4 class="font-bold text-slate-800 text-sm md:text-base">तलाठी स्पेशल सराव संच</h4>
-                                <span class="text-[10px] bg-slate-100 text-slate-600 font-semibold px-2 py-0.5 rounded">मराठी, इंग्रजी, सामान्य ज्ञान, बौद्धिक चाचणी</span>
-                            </div>
-                            <p class="text-xs text-slate-500 mt-1 pl-4">
-                                मागील परीक्षांमध्ये विचारलेले प्रश्न, महसूल अधिनियम व भूमी अभिलेख संबंधित मूलभूत प्रश्न.
-                            </p>
-                        </div>
-                        <div class="flex flex-wrap items-center gap-2 pl-4 lg:pl-0">
-                            <button onclick="openResourceModal('PDF', 'तलाठी परीक्षा विशेष नोट्स व सूत्रे')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3 py-1.5 rounded-lg transition flex items-center gap-1.5">
-                                <i class="fa-solid fa-file-pdf text-red-500"></i> PDF नोट्स
-                            </button>
-                            <button onclick="openResourceModal('AUDIO', 'तलाठी सामान्य ज्ञान - ऑडिओ रिव्हिजन')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3 py-1.5 rounded-lg transition flex items-center gap-1.5">
-                                <i class="fa-solid fa-headphones text-indigo-500"></i> ऑडिओ ट्रॅक
-                            </button>
-                            <button onclick="openResourceModal('VIDEO', 'व्हिडिओ व्याख्यान - तलाठी परीक्षा विश्लेषण')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3 py-1.5 rounded-lg transition flex items-center gap-1.5">
-                                <i class="fa-solid fa-video text-purple-600"></i> व्हिडिओ मार्गदर्शन
-                            </button>
-                            <a href="/exam" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3.5 py-1.5 rounded-lg shadow-sm transition flex items-center gap-1.5">
-                                <i class="fa-solid fa-pen-nib"></i> CBT टेस्ट द्या
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- DEPARTMENT 3: सामान्य प्रशासन विभाग (MPSC गट-क / गट-ब) -->
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                <div class="bg-indigo-700 text-white px-5 py-3.5 flex flex-wrap items-center justify-between gap-2">
-                    <div class="flex items-center gap-3">
-                        <div class="w-9 h-9 rounded-lg bg-white/20 flex items-center justify-center text-lg">
-                            <i class="fa-solid fa-building-columns"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-extrabold text-sm md:text-base tracking-wide">सामान्य प्रशासन विभाग • MPSC संयुक्त पूर्व परीक्षा दालन</h3>
-                            <p class="text-[11px] text-indigo-100">मंत्रालय लिपिक, कर सहाय्यक, दुय्यम निरीक्षक व राज्य सेवा</p>
-                        </div>
-                    </div>
-                    <span class="bg-indigo-800/60 text-indigo-100 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">
-                        आयोग प्रमाणित अभ्यासक्रम
-                    </span>
-                </div>
-
-                <div class="p-5 divide-y divide-slate-100">
-                    <div class="py-4 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
-                        <div class="flex-1">
-                            <div class="flex items-center gap-2">
-                                <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
-                                <h4 class="font-bold text-slate-800 text-sm md:text-base">MPSC गट-क व गट-ब संयुक्त पूर्व परीक्षा</h4>
-                                <span class="text-[10px] bg-slate-100 text-slate-600 font-semibold px-2 py-0.5 rounded">राज्यघटना, आधुनिक इतिहास, विज्ञान व तंत्रज्ञान</span>
-                            </div>
-                            <p class="text-xs text-slate-500 mt-1 pl-4">
-                                आयोगाच्या दर्जेदार दर्जाचे बहुपर्यायी प्रश्न आणि नकारात्मक गुणपद्धतीसह अचूक सराव.
-                            </p>
-                        </div>
-                        <div class="flex flex-wrap items-center gap-2 pl-4 lg:pl-0">
-                            <button onclick="openResourceModal('PDF', 'MPSC संयुक्त पूर्व परीक्षा - फास्ट ट्रॅक नोट्स')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3 py-1.5 rounded-lg transition flex items-center gap-1.5">
-                                <i class="fa-solid fa-file-pdf text-red-500"></i> PDF नोट्स
-                            </button>
-                            <button onclick="openResourceModal('AUDIO', 'भारतीय राज्यघटना - कलम व तरतुदी ऑडिओ नोट्स')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3 py-1.5 rounded-lg transition flex items-center gap-1.5">
-                                <i class="fa-solid fa-headphones text-indigo-500"></i> ऑडिओ ट्रॅक
-                            </button>
-                            <button onclick="openResourceModal('VIDEO', 'व्हिडिओ व्याख्यान - MPSC पूर्व परीक्षा स्ट्रॅटेजी व सराव')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3 py-1.5 rounded-lg transition flex items-center gap-1.5">
-                                <i class="fa-solid fa-video text-purple-600"></i> व्हिडिओ मार्गदर्शन
-                            </button>
-                            <a href="/exam" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3.5 py-1.5 rounded-lg shadow-sm transition flex items-center gap-1.5">
-                                <i class="fa-solid fa-pen-nib"></i> MPSC CBT टेस्ट
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </div>
     </main>
 
-    <!-- Interactive Modal -->
+    <!-- Modal for PDF / Audio / Video Lecture View -->
     <div id="resourceModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 relative">
+        <div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl border border-slate-200 relative">
             <button onclick="closeResourceModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-lg">
                 <i class="fa-solid fa-xmark"></i>
             </button>
-            <div id="modalIcon" class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl mb-3"></div>
+            <div id="modalIcon" class="w-10 h-10 rounded-xl flex items-center justify-center text-xl mb-3"></div>
             <span id="modalTypeBadge" class="text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider inline-block"></span>
-            <h3 id="modalTitle" class="text-base font-bold text-slate-800 mt-2"></h3>
-            <div id="modalBody" class="mt-4 text-xs text-slate-600 leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-100"></div>
-            <div class="mt-6 flex justify-end gap-2">
-                <button onclick="closeResourceModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg transition">
+            <h3 id="modalTitle" class="text-sm font-bold text-slate-800 mt-2"></h3>
+            <div id="modalBody" class="mt-3 text-xs text-slate-600 bg-slate-50 p-3.5 rounded-xl border border-slate-100"></div>
+            <div class="mt-5 flex justify-end gap-2">
+                <button onclick="closeResourceModal()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg transition">
                     बंद करा
                 </button>
-                <a id="modalActionBtn" href="/exam" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg shadow transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-arrow-right"></i> चाचणी सुरू करा
+                <a id="modalActionBtn" href="/exam" class="px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg shadow transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-play"></i> CBT टेस्ट द्या
                 </a>
             </div>
         </div>
     </div>
 
-    <!-- Clean Footer -->
-    <footer class="bg-slate-900 text-slate-400 text-xs py-8 px-4 border-t border-slate-800 mt-auto relative z-10">
-        <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-            <div class="flex items-center gap-2">
+    <!-- Clean Official Footer -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-6 px-4 border-t border-slate-800 mt-auto">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-center md:text-left">
+            <div class="flex items-center justify-center md:justify-start gap-2">
                 <div class="w-6 h-6 rounded bg-indigo-600 text-white flex items-center justify-center font-bold text-xs">
                     श्री
                 </div>
                 <span class="text-slate-200 font-bold">श्री लर्न (ShreeLearn)</span>
             </div>
-            <div class="text-center text-slate-400 text-[11px]">
-                महाराष्ट्र राज्य स्पर्धा परीक्षा डिजिटल ई-लर्निंग, ऑडिओ रिव्हिजन व CBT सराव व्यासपीठ • सर्व हक्क राखीव.
+            <div class="text-[11px] text-slate-400">
+                महाराष्ट्र स्पर्धा परीक्षा डिजिटल सराव मंच • १००% मोफत व जाहिरात मुक्त • सर्व हक्क राखीव.
             </div>
-            <div class="flex items-center gap-4 text-[11px]">
+            <div class="flex items-center justify-center gap-4 text-[11px]">
                 <a href="/exam" class="hover:text-white transition">CBT परीक्षा</a>
                 <span class="text-slate-700">•</span>
                 <a href="/" class="hover:text-white transition">मुख्य पृष्ठ</a>
@@ -405,50 +382,54 @@
             modalTitle.innerText = title;
 
             if (type === 'PDF') {
-                icon.className = "w-12 h-12 rounded-xl bg-red-50 text-red-600 flex items-center justify-center text-2xl mb-3";
+                icon.className = "w-10 h-10 rounded-xl bg-red-50 text-red-600 flex items-center justify-center text-xl mb-3";
                 icon.innerHTML = '<i class="fa-solid fa-file-pdf"></i>';
                 badge.className = "text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider bg-red-100 text-red-700 inline-block";
                 badge.innerText = "PDF डिजिटल नोट्स";
                 body.innerHTML = `
-                    <p class="font-semibold text-slate-800 mb-2">📄 ही अभ्यास नोट्स लवकरच PDF स्वरूपात उपलब्ध होत आहे.</p>
-                    <p>यामध्ये परीक्षेसाठी अत्यंत आवश्यक मुद्दे आणि मागील वर्षांच्या प्रश्नांचे संक्षिप्त विश्लेषण समाविष्ट असेल.</p>
+                    <p class="font-semibold text-slate-800 mb-1">📄 संपूर्ण अभ्यास नोट्स PDF:</p>
+                    <p class="text-slate-500 mb-3">महत्वाचे नियम, मागील वर्षांच्या प्रश्नांचे वर्गीकरण आणि जलद रिव्हिजन तक्ते.</p>
+                    <div class="p-2.5 bg-white border border-slate-200 rounded-lg flex items-center justify-between">
+                        <span class="text-[11px] font-bold text-slate-700"><i class="fa-solid fa-file-lines text-red-500 mr-1.5"></i> ${title}.pdf</span>
+                        <span class="text-[10px] text-slate-400">उपलब्ध</span>
+                    </div>
                 `;
                 actionBtn.innerHTML = '<i class="fa-solid fa-download"></i> नोट्स डाऊनलोड करा';
                 actionBtn.href = "#";
             } else if (type === 'AUDIO') {
-                icon.className = "w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-2xl mb-3";
+                icon.className = "w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl mb-3";
                 icon.innerHTML = '<i class="fa-solid fa-headphones"></i>';
                 badge.className = "text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider bg-indigo-100 text-indigo-700 inline-block";
-                badge.innerText = "स्मार्ट ऑडिओ ट्रॅक";
+                badge.innerText = "ऑडिओ रिव्हिजन ट्रॅक";
                 body.innerHTML = `
-                    <p class="font-semibold text-slate-800 mb-2">🎧 प्रवासात किंवा मोकळ्या वेळेत ऐकून रिव्हिजन करा:</p>
-                    <div class="bg-white p-3 rounded-lg border border-slate-200 mt-2 flex items-center gap-3">
+                    <p class="font-semibold text-slate-800 mb-2">🎧 प्रवासात ऐकून रिव्हिजन करा:</p>
+                    <div class="bg-white p-3 rounded-lg border border-slate-200 flex items-center gap-3">
                         <button class="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs">
                             <i class="fa-solid fa-play"></i>
                         </button>
                         <div class="flex-1">
-                            <div class="text-[11px] font-bold text-slate-700">ऑडिओ सारांश (१० मिनिटे)</div>
-                            <div class="w-full bg-slate-200 h-1.5 rounded-full mt-1">
-                                <div class="bg-indigo-600 h-1.5 rounded-full w-1/3"></div>
+                            <div class="text-[11px] font-bold text-slate-700">${title} (१० मिनिटे)</div>
+                            <div class="w-full bg-slate-200 h-1.5 rounded-full mt-1.5">
+                                <div class="bg-indigo-600 h-1.5 rounded-full w-2/5"></div>
                             </div>
                         </div>
                     </div>
                 `;
-                actionBtn.innerHTML = '<i class="fa-solid fa-pen-nib"></i> संबंधित CBT टेस्ट द्या';
+                actionBtn.innerHTML = '<i class="fa-solid fa-play"></i> CBT टेस्ट सुरू करा';
                 actionBtn.href = "/exam";
             } else if (type === 'VIDEO') {
-                icon.className = "w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-2xl mb-3";
-                icon.innerHTML = '<i class="fa-solid fa-chalkboard-user"></i>';
+                icon.className = "w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl mb-3";
+                icon.innerHTML = '<i class="fa-solid fa-play"></i>';
                 badge.className = "text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider bg-purple-100 text-purple-700 inline-block";
-                badge.innerText = "डिजिटल व्हिडिओ व्याख्यान";
+                badge.innerText = "व्हिडिओ मार्गदर्शन लेक्चर";
                 body.innerHTML = `
-                    <p class="font-semibold text-slate-800 mb-2">🎬 संकल्पना स्पष्टीकरण व विश्लेषण:</p>
+                    <p class="font-semibold text-slate-800 mb-2">🎬 व्याख्यान व संकल्पना स्पष्टीकरण:</p>
                     <div class="aspect-video bg-slate-900 rounded-lg flex flex-col items-center justify-center text-white p-4 text-center">
                         <i class="fa-solid fa-circle-play text-4xl text-amber-400 mb-2"></i>
-                        <span class="text-xs font-semibold">व्हिडिओ व्याख्यान लोड होत आहे...</span>
+                        <span class="text-xs font-semibold">व्हिडिओ लेक्चर लोड होत आहे...</span>
                     </div>
                 `;
-                actionBtn.innerHTML = '<i class="fa-solid fa-pen-nib"></i> टेस्ट सोडवा';
+                actionBtn.innerHTML = '<i class="fa-solid fa-pen-nib"></i> संबंधित चाचणी द्या';
                 actionBtn.href = "/exam";
             }
 
@@ -461,4 +442,4 @@
     </script>
 
 </body>
-</html>                                                                                                                                                                   
+</html>                                
