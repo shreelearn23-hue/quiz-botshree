@@ -3,350 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>श्री लर्न - डिजिटल व्याख्यान दालन व स्मार्ट फलक</title>
+    <title>श्री लर्न - डिजिटल व्याख्यान स्टुडिओ</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        /* 3D Classroom Environment */
-        .classroom-studio {
-            background: radial-gradient(circle at 50% 30%, #e0f2fe 0%, #bae6fd 60%, #93c5fd 100%);
-            box-shadow: inset 0 0 80px rgba(15, 23, 42, 0.08);
+        .board-glow {
+            box-shadow: 0 20px 40px -15px rgba(8, 90, 106, 0.2);
         }
-        .floor-stage {
-            background: linear-gradient(180deg, #94a3b8 0%, #64748b 40%, #475569 100%);
-            perspective: 600px;
-        }
-
-        /* Realistic Whiteboard Frame with Metallic Bevel */
-        .whiteboard-frame {
-            background: #ffffff;
-            border: 10px solid #334155;
-            border-top: 12px solid #1e293b;
-            box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.4);
-        }
-        .whiteboard-surface {
-            background: radial-gradient(circle at 30% 20%, #ffffff 0%, #f8fafc 85%, #f1f5f9 100%);
-        }
-
-        /* Marker Tray */
-        .marker-tray {
-            background: linear-gradient(180deg, #64748b 0%, #334155 100%);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Teacher Realistic Natural Pointer Physics */
-        @keyframes teacherPointAction {
-            0%, 100% {
-                transform: rotate(0deg) translateY(0);
-            }
-            30% {
-                transform: rotate(-10deg) translateY(-8px);
-            }
-            70% {
-                transform: rotate(-5deg) translateY(-3px);
-            }
-        }
-        .pointer-live {
-            animation: teacherPointAction 2.8s infinite ease-in-out;
-            transform-origin: 105px 175px;
-        }
-
-        /* Subtle Breathing Movement for Teacher */
-        @keyframes lifeBreathing {
-            0%, 100% { transform: translateY(0) scaleY(1); }
-            50% { transform: translateY(-4px) scaleY(1.008); }
-        }
-        .teacher-figure {
-            animation: lifeBreathing 3.6s infinite ease-in-out;
-            transform-origin: bottom center;
-        }
-
-        /* Laser Dot on Whiteboard */
-        .laser-point {
-            box-shadow: 0 0 12px 4px rgba(239, 68, 68, 0.9);
-        }
-
-        /* Animated Highlight Stroke */
-        .smart-marker-highlight {
-            background: linear-gradient(100deg, rgba(253, 224, 71, 0.8) 0%, rgba(250, 204, 21, 0.85) 100%);
+        .highlight-word {
+            background-color: #fef08a;
+            padding: 2px 4px;
             border-radius: 4px;
-            padding: 2px 6px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
     </style>
 </head>
-<body class="bg-slate-900 text-slate-800 font-sans min-h-screen flex flex-col justify-between">
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col justify-between">
 
-    <!-- Top Navigation Header -->
+    <!-- Top Utility Bar -->
     <header class="bg-[#085a6a] text-white px-4 md:px-8 py-3 flex items-center justify-between shadow-md border-b border-teal-800">
         <div class="flex items-center gap-3">
             <div class="w-9 h-9 rounded-xl bg-white text-[#085a6a] flex items-center justify-center font-black text-lg shadow">
                 श्री
             </div>
             <div>
-                <h1 class="text-xs md:text-sm font-extrabold tracking-tight">श्री लर्न • डिजिटल 3D व्याख्यान दालन</h1>
-                <p class="text-[10px] text-teal-200">थेट ऑडिओ स्पष्टीकरण व संकल्पना मार्गदर्शन</p>
+                <h1 id="pageTopic" class="text-xs md:text-sm font-extrabold tracking-tight">{{ topic }}</h1>
+                <p class="text-[10px] text-teal-200">स्मार्ट डिजिटल व्याख्यान व संकल्पना स्पष्टीकरण</p>
             </div>
         </div>
 
-        <div class="flex items-center gap-2.5">
-            <button onclick="toggleTeaching()" id="btnAction" class="px-4 py-2 bg-[#f28b20] hover:bg-amber-600 text-white font-bold rounded-xl text-xs shadow-lg flex items-center gap-2 transition transform active:scale-95">
+        <div class="flex items-center gap-2">
+            <button onclick="generateAILecture()" id="btnAction" class="px-4 py-2 bg-[#f28b20] hover:bg-amber-600 text-white font-bold rounded-xl text-xs shadow-lg flex items-center gap-2 transition">
                 <i id="btnIcon" class="fa-solid fa-play"></i>
                 <span id="btnLabel">व्याख्यान सुरू करा</span>
             </button>
             <a href="/" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-semibold transition">
-                मुख्य पृष्ठ
+                बाहेर पडा
             </a>
         </div>
     </header>
 
-    <!-- REALISTIC CLASSROOM WORKSPACE -->
-    <main class="w-full max-w-6xl mx-auto p-2 sm:p-4 md:p-6 flex-1 flex flex-col justify-center">
+    <!-- REAL STUDIO LECTURE HALL -->
+    <main class="w-full max-w-5xl mx-auto p-4 md:p-6 flex-1 flex flex-col justify-center">
 
-        <div class="classroom-studio rounded-3xl p-4 md:p-8 shadow-2xl border-4 border-slate-700/30 relative overflow-hidden flex flex-col justify-between min-h-[520px] md:min-h-[580px]">
-
-            <!-- STAGE: Whiteboard + Teacher + Podium -->
-            <div class="relative w-full flex-1 flex flex-col md:flex-row items-end justify-between z-10">
-
-                <!-- 1. REALISTIC METALLIC WHITEBOARD (Left / Center) -->
-                <div class="w-full md:w-[70%] whiteboard-frame rounded-2xl p-5 md:p-8 mb-6 md:mb-10 relative flex flex-col justify-between min-h-[280px] md:min-h-[380px]">
-                    
-                    <!-- Top Board Hanging Brackets -->
-                    <div class="absolute -top-4 left-16 w-8 h-4 bg-slate-600 rounded-t shadow"></div>
-                    <div class="absolute -top-4 right-16 w-8 h-4 bg-slate-600 rounded-t shadow"></div>
-
-                    <!-- Board Header Info -->
-                    <div class="border-b border-slate-200 pb-2.5 flex items-center justify-between text-xs">
-                        <span class="font-extrabold text-[#085a6a] flex items-center gap-1.5 uppercase tracking-wide">
-                            <i class="fa-solid fa-chalkboard-user"></i> स्पर्धा परीक्षा डिजिटल फलक
-                        </span>
-                        <div class="flex items-center gap-2">
-                            <span id="liveStatus" class="bg-amber-100 text-amber-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1">
-                                <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping"></span> वाचनास सज्ज
-                            </span>
-                        </div>
+        <!-- Modern Studio Board Container -->
+        <div class="bg-slate-800 rounded-3xl p-5 md:p-8 border border-slate-700 board-glow space-y-6">
+            
+            <!-- Live Status & Instructor Bar -->
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-700 pb-3">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-full bg-teal-500/20 text-teal-400 border border-teal-500/30 flex items-center justify-center text-sm">
+                        <i class="fa-solid fa-chalkboard-user"></i>
                     </div>
-
-                    <!-- Live Content Body -->
-                    <div class="my-auto py-4 relative">
-                        <h2 id="lectureTopic" class="text-base md:text-xl font-black text-slate-900 mb-3 tracking-tight">
-                            विषय: मराठी व्याकरण - संधी व प्रकार
-                        </h2>
-                        
-                        <div id="lectureBody" class="text-xs sm:text-sm md:text-base text-slate-700 leading-relaxed font-medium">
-                            "संधी म्हणजे दोन वर्णांचे एकत्रीकरण होय. जेव्हा दोन जवळजवळ आलेले वर्ण एकत्र मिसळतात, तेव्हा तयार होणाऱ्या नव्या रचनेला संधी म्हणतात. उदाहरणार्थ: विद्या + अर्थी = विद्यार्थी (दीर्घत्व स्वरसंधी). परीक्षेच्या दृष्टीने संधीचे नियम पाठ असणे अत्यंत गरजेचे आहे."
-                        </div>
-
-                        <!-- Real Red Laser Pointer Target Dot on Board -->
-                        <div id="laserSpot" class="hidden absolute -left-2 top-8 w-3 h-3 rounded-full bg-red-600 laser-point transition-all duration-300"></div>
-                    </div>
-
-                    <!-- Bottom Marker Tray & Markers -->
-                    <div class="pt-3 border-t border-slate-200 flex items-center justify-between text-xs text-slate-500">
-                        <span id="currentSentence" class="text-[#085a6a] font-bold truncate max-w-[80%]">
-                            स्पष्टीकरण सुरू करण्यासाठी वरील 'व्याख्यान सुरू करा' दाबा.
-                        </span>
-                        <div class="flex gap-1.5">
-                            <span class="w-5 h-1.5 rounded-sm bg-blue-600 shadow-sm" title="Blue Marker"></span>
-                            <span class="w-5 h-1.5 rounded-sm bg-red-600 shadow-sm" title="Red Marker"></span>
-                            <span class="w-5 h-1.5 rounded-sm bg-black shadow-sm" title="Black Marker"></span>
-                        </div>
-                    </div>
-
-                    <!-- Bottom Physical Marker Tray Shelf -->
-                    <div class="absolute -bottom-3 left-1/4 right-1/4 h-2 marker-tray rounded-full"></div>
-                </div>
-
-                <!-- 2. EXECUTIVE LECTURE PODIUM (Left Foreground) -->
-                <div class="hidden md:flex flex-col items-center absolute left-4 bottom-0 w-44 z-20">
-                    <div class="w-48 h-3.5 bg-slate-500 rounded-t-md shadow-md"></div>
-                    <div class="w-40 h-28 bg-gradient-to-r from-blue-700 via-blue-600 to-blue-800 border-x-2 border-slate-700 flex flex-col items-center justify-center shadow-2xl">
-                        <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center font-bold text-white text-xs mb-1">
-                            श्री
-                        </div>
-                        <span class="text-[10px] font-bold text-white tracking-widest uppercase">ShreeLearn</span>
+                    <div>
+                        <div class="text-xs font-bold text-white">डिजिटल मार्गदर्शक (स्पर्धा परीक्षा तज्ज्ञ)</div>
+                        <div id="liveBadge" class="text-[10px] text-amber-400 font-semibold">तयार • सुरू करण्यासाठी बटनावर क्लिक करा</div>
                     </div>
                 </div>
 
-                <!-- 3. REALISTIC GRAPHICAL TEACHER (Pink Dress, Highlights, Realistic Pointer - As in Photo) -->
-                <div class="w-full md:w-[32%] flex justify-center md:justify-end z-10 teacher-figure">
-                    <svg class="w-52 md:w-64 h-auto drop-shadow-2xl" viewBox="0 0 260 420" xmlns="http://www.w3.org/2000/svg">
-                        
-                        <defs>
-                            <!-- Dress Shading Gradient -->
-                            <linearGradient id="pinkDressGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#ff758c"/>
-                                <stop offset="45%" stop-color="#ff3b68"/>
-                                <stop offset="100%" stop-color="#d91244"/>
-                            </linearGradient>
-
-                            <!-- Hair 3D Shading -->
-                            <linearGradient id="hairGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#78350f"/>
-                                <stop offset="40%" stop-color="#451a03"/>
-                                <stop offset="100%" stop-color="#271003"/>
-                            </linearGradient>
-
-                            <!-- Skin Shading -->
-                            <linearGradient id="skinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#fed7aa"/>
-                                <stop offset="70%" stop-color="#fdba74"/>
-                                <stop offset="100%" stop-color="#f59e0b"/>
-                            </linearGradient>
-
-                            <!-- Metallic Pointer Stick -->
-                            <linearGradient id="stickGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                                <stop offset="0%" stop-color="#475569"/>
-                                <stop offset="50%" stop-color="#94a3b8"/>
-                                <stop offset="100%" stop-color="#334155"/>
-                            </linearGradient>
-                        </defs>
-
-                        <!-- Ground Shadow under Teacher -->
-                        <ellipse cx="140" cy="385" rx="55" ry="10" fill="rgba(15, 23, 42, 0.25)"/>
-
-                        <!-- Legs (Realistic Skin) -->
-                        <rect x="118" y="275" width="13" height="95" fill="url(#skinGrad)" rx="6"/>
-                        <rect x="144" y="275" width="13" height="95" fill="url(#skinGrad)" rx="6"/>
-
-                        <!-- High Heel Shoes (Glossy Red) -->
-                        <polygon points="112,370 134,370 138,382 106,382" fill="#be123c"/>
-                        <polygon points="140,370 162,370 166,382 134,382" fill="#be123c"/>
-                        <rect x="110" y="374" width="4" height="8" fill="#881337"/>
-                        <rect x="138" y="374" width="4" height="8" fill="#881337"/>
-
-                        <!-- Pink Dress Body (Back-Perspective View As in Reference) -->
-                        <!-- Dress Skirt -->
-                        <path d="M 105,175 C 95,225 90,260 92,295 L 175,295 C 178,260 172,225 160,175 Z" fill="url(#pinkDressGrad)"/>
-                        
-                        <!-- Waistline & Belt curve -->
-                        <path d="M 112,175 Q 135,183 155,175 L 157,185 Q 135,193 110,185 Z" fill="#b91c1c" opacity="0.4"/>
-
-                        <!-- Upper Dress / Back Torso -->
-                        <path d="M 115,160 C 110,190 108,215 110,240 L 160,240 C 162,215 160,190 152,160 Z" fill="url(#pinkDressGrad)"/>
-
-                        <!-- Left Arm (Resting Down naturally) -->
-                        <path d="M 155,165 Q 166,210 162,250" stroke="url(#skinGrad)" stroke-width="13" stroke-linecap="round" fill="none"/>
-
-                        <!-- Head & Realistic Layered Hair -->
-                        <ellipse cx="136" cy="125" r="23" fill="url(#skinGrad)"/>
-                        
-                        <!-- Hair Volume & Waves (Glossy Texture) -->
-                        <path d="M 115,120 C 105,165 110,200 145,200 C 170,200 175,165 168,120 C 165,95 150,88 136,88 C 120,88 116,95 115,120 Z" fill="url(#hairGrad)"/>
-                        <!-- Hair Highlights -->
-                        <path d="M 124,105 Q 136,130 134,175" stroke="#a16207" stroke-width="3" fill="none" opacity="0.5"/>
-                        <path d="M 148,110 Q 155,140 150,170" stroke="#a16207" stroke-width="2.5" fill="none" opacity="0.4"/>
-
-                        <!-- RIGHT ARM & POINTER STICK (Live Pointing at the Whiteboard) -->
-                        <g id="livePointerGroup" class="pointer-live">
-                            <!-- Right Arm Raising toward Board -->
-                            <path d="M 118,165 Q 90,140 70,130" stroke="url(#skinGrad)" stroke-width="13" stroke-linecap="round" fill="none"/>
-                            <!-- Hand / Palm -->
-                            <circle cx="68" cy="128" r="6.5" fill="url(#skinGrad)"/>
-                            <!-- Long Professional Pointer Stick (Reaching onto Board) -->
-                            <line x1="70" y1="130" x2="-25" y2="60" stroke="url(#stickGrad)" stroke-width="4.5" stroke-linecap="round"/>
-                            <!-- Pointer Tip (Glossy Red Tip) -->
-                            <circle cx="-25" cy="60" r="4.5" fill="#ef4444"/>
-                        </g>
-
-                    </svg>
+                <div class="flex items-center gap-2">
+                    <button onclick="downloadNotes()" class="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 rounded-lg text-xs font-bold text-slate-200 transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-file-arrow-down text-emerald-400"></i> नोट्स डाऊनलोड
+                    </button>
+                    <a href="/exam" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 rounded-lg text-xs font-bold text-white transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-pen-to-square"></i> CBT सराव
+                    </a>
                 </div>
-
             </div>
 
-            <!-- Floor Stage Horizon Base -->
-            <div class="w-full h-8 floor-stage rounded-b-2xl mt-auto"></div>
+            <!-- SMART DIGITAL WHITEBOARD (Live Speech & Visual Board) -->
+            <div class="bg-white rounded-2xl p-6 md:p-8 text-slate-900 border-4 border-slate-600 shadow-inner min-h-[300px] flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between border-b border-slate-200 pb-2 mb-4">
+                        <span class="text-xs font-extrabold text-[#085a6a] uppercase tracking-wide flex items-center gap-1.5">
+                            <i class="fa-solid fa-book-open"></i> विषय स्पष्टीकरण फलक
+                        </span>
+                        <span id="readingIndicator" class="text-[11px] text-slate-500 font-semibold">वाचनासाठी सज्ज</span>
+                    </div>
+
+                    <!-- Lecture Speech Output -->
+                    <div id="lectureDisplay" class="text-sm md:text-base font-medium leading-relaxed text-slate-800 space-y-3">
+                        <p id="mainText">
+                            "नमस्कार विद्यार्थी मित्रांनो! वरील <strong>'व्याख्यान सुरू करा'</strong> बटनावर क्लिक करा. 
+                            हे व्याख्यान तुम्हाला या घटकातील महत्वाचे नियम, वारंवार विचारले जाणारे प्रश्न आणि शॉर्टकट युक्त्या समजावून सांगेल."
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Bottom Progress Bar -->
+                <div class="pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                    <span id="currentStatusText" class="truncate max-w-[80%] font-semibold text-[#085a6a]">
+                        श्री लर्न डिजिटल सराव केंद्र • महाराष्ट्र
+                    </span>
+                    <i class="fa-solid fa-volume-high text-teal-600"></i>
+                </div>
+            </div>
 
         </div>
 
     </main>
 
-    <!-- Synchronized Speech & Graphic Highlighting Engine -->
+    <!-- Footer Strip -->
+    <footer class="bg-slate-950 text-slate-500 text-xs py-3 px-4 text-center border-t border-slate-800">
+        श्री लर्न • महाराष्ट्र स्पर्धा परीक्षा डिजिटल ई-लर्निंग व सराव व्यासपीठ
+    </footer>
+
+    <!-- Gemini & Browser Speech Engine Sync -->
     <script>
         let synth = window.speechSynthesis;
         let isSpeaking = false;
-        let speech = null;
+        let currentUtterance = null;
+        let cachedExplanation = "";
 
-        function toggleTeaching() {
-            if (!synth) {
-                alert("तुमच्या ब्राऊझरमध्ये ऑडिओ सुविधा उपलब्ध नाही.");
+        async function generateAILecture() {
+            if (isSpeaking) {
+                synth.cancel();
+                isSpeaking = false;
+                updateButton(false, "व्याख्यान सुरू करा");
                 return;
             }
 
-            if (synth.speaking && !synth.paused) {
-                synth.pause();
-                updateUIState(false, "पुढे सुरू करा");
-                return;
+            const topic = document.getElementById('pageTopic').innerText;
+            const badge = document.getElementById('liveBadge');
+            const display = document.getElementById('mainText');
+
+            if (!cachedExplanation) {
+                badge.innerText = "तयार होत आहे... कृपया थांबा";
+                display.innerText = "तज्ज्ञ व्याख्यान तयार केले जात आहे, कृपया काही सेकंद प्रतीक्षा करा...";
+
+                try {
+                    const res = await fetch('/api/ai-explain', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ topic: topic, content: display.innerText })
+                    });
+                    const data = await res.json();
+                    if (data.status === 'success') {
+                        cachedExplanation = data.explanation;
+                    } else {
+                        cachedExplanation = "संधी म्हणजे दोन वर्णांचे एकत्रीकरण होय. परीक्षेसाठी संधीचे प्रकार आणि नियम अत्यंत महत्त्वाचे आहेत.";
+                    }
+                } catch (e) {
+                    cachedExplanation = "संधी म्हणजे दोन वर्णांचे एकत्रीकरण होय. परीक्षेसाठी संधीचे प्रकार आणि नियम अत्यंत महत्त्वाचे आहेत.";
+                }
             }
 
-            if (synth.paused) {
-                synth.resume();
-                updateUIState(true, "थांबवा (Pause)");
-                return;
-            }
-
-            startRealLecture();
+            display.innerText = cachedExplanation;
+            startSpeaking(cachedExplanation);
         }
 
-        function startRealLecture() {
+        function startSpeaking(text) {
             synth.cancel();
+            currentUtterance = new SpeechSynthesisUtterance(text);
 
-            const fullText = document.getElementById('lectureBody').innerText;
-            speech = new SpeechSynthesisUtterance(fullText);
-
-            // High Quality Marathi / Hindi Voice Engine
             let voices = synth.getVoices();
-            let chosenVoice = voices.find(v => v.lang.includes('mr') || v.lang.includes('hi')) || voices[0];
-            if (chosenVoice) speech.voice = chosenVoice;
+            let voice = voices.find(v => v.lang.includes('mr') || v.lang.includes('hi')) || voices[0];
+            if (voice) currentUtterance.voice = voice;
 
-            speech.rate = 0.92; // Natural teacher teaching pace
-            speech.pitch = 1.15; // Natural clear female instructor pitch
+            currentUtterance.rate = 0.95;
+            currentUtterance.pitch = 1.05;
 
-            speech.onstart = function() {
+            currentUtterance.onstart = function() {
                 isSpeaking = true;
-                updateUIState(true, "थांबवा (Pause)");
-                document.getElementById('livePointerGroup').classList.add('pointer-live');
-                document.getElementById('laserSpot').classList.remove('hidden');
-                document.getElementById('liveStatus').innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span> लाईव्ह शिकवत आहेत';
-                document.getElementById('liveStatus').className = "bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1";
+                updateButton(true, "थांबवा (Pause)");
+                document.getElementById('liveBadge').innerText = "🔊 व्याख्यान सुरू आहे...";
+                document.getElementById('readingIndicator').innerText = "थेट वाचन";
             };
 
-            speech.onboundary = function(event) {
-                const currentPiece = fullText.substring(event.charIndex, event.charIndex + 70);
-                document.getElementById('currentSentence').innerHTML = `पॉइंटर: <span class="smart-marker-highlight text-slate-900 font-extrabold">${currentPiece}...</span>`;
-
-                // Move laser spot across the board dynamically
-                const laser = document.getElementById('laserSpot');
-                const progress = (event.charIndex / fullText.length);
-                laser.style.top = `${25 + (progress * 70)}px`;
-                laser.style.left = `${10 + (progress * 80)}%`;
+            currentUtterance.onboundary = function(e) {
+                const chunk = text.substring(e.charIndex, e.charIndex + 65);
+                document.getElementById('currentStatusText').innerText = `बोलत आहे: "${chunk}..."`;
             };
 
-            speech.onend = function() {
-                stopTeaching();
-                document.getElementById('currentSentence').innerText = "व्याख्यान यशस्वीरित्या पूर्ण झाले आहे! आता प्रश्न सोडवा.";
+            currentUtterance.onend = function() {
+                isSpeaking = false;
+                updateButton(false, "पुन्हा ऐका");
+                document.getElementById('liveBadge').innerText = "व्याख्यान पूर्ण झाले!";
+                document.getElementById('readingIndicator').innerText = "पूर्ण";
             };
 
-            speech.onerror = function() {
-                stopTeaching();
-            };
-
-            synth.speak(speech);
+            synth.speak(currentUtterance);
         }
 
-        function stopTeaching() {
-            if (synth) synth.cancel();
-            isSpeaking = false;
-            updateUIState(false, "व्याख्यान सुरू करा");
-            document.getElementById('livePointerGroup').classList.remove('pointer-live');
-            document.getElementById('laserSpot').classList.add('hidden');
-            document.getElementById('liveStatus').innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> वाचनास सज्ज';
-            document.getElementById('liveStatus').className = "bg-amber-100 text-amber-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1";
-        }
-
-        function updateUIState(running, text) {
+        function updateButton(active, text) {
             document.getElementById('btnLabel').innerText = text;
-            document.getElementById('btnIcon').className = running ? "fa-solid fa-pause" : "fa-solid fa-play";
+            document.getElementById('btnIcon').className = active ? "fa-solid fa-pause" : "fa-solid fa-play";
+        }
+
+        function downloadNotes() {
+            window.print();
         }
 
         if (speechSynthesis.onvoiceschanged !== undefined) {
