@@ -88,7 +88,7 @@ def admin_page():
 def admin_upload_json():
     admin_key = request.form.get('admin_key', '').strip()
     if admin_key != ADMIN_PASSWORD:
-        return redirect(url_for('admin_page', err="चुकीचा पासवर्ड! कृपया बरोबर पासवर्ड टाका."))
+        return redirect(url_for('admin_page', err="चुकीचा पासवर्ड!"))
 
     if 'exam_file' not in request.files:
         return redirect(url_for('admin_page', err="कोणतीही JSON फाईल निवडलेली नाही."))
@@ -97,7 +97,7 @@ def admin_upload_json():
     category = request.form.get('exam_category', 'general').strip()
 
     if file.filename == '' or not file.filename.lower().endswith('.json'):
-        return redirect(url_for('admin_page', err="कृपया वैध .json फॉरमॅटमधील फाईल निवडा."))
+        return redirect(url_for('admin_page', err="कृपया वैध .json फाईल निवडा."))
 
     filename = secure_filename(file.filename)
     final_name = f"{category}_{filename}" if not filename.startswith(category) else filename
@@ -106,16 +106,23 @@ def admin_upload_json():
     try:
         content = file.read().decode('utf-8')
         parsed = json.loads(content)
+
+        # Smart format converter: agar dictionary ho toh questions nikaal lo
+        if isinstance(parsed, dict):
+            for key in ['questions', 'quiz', 'data', 'mcqs']:
+                if key in parsed and isinstance(parsed[key], list):
+                    parsed = parsed[key]
+                    break
+
         if not isinstance(parsed, list):
-            return redirect(url_for('admin_page', err="JSON फाईलच्या आत प्रश्नांची लिस्ट [ {...}, {...} ] असायला हवी."))
-        
+            return redirect(url_for('admin_page', err="JSON फाईलमध्ये प्रश्नांची वैध यादी आढळली नाही."))
+
         with open(save_path, 'w', encoding='utf-8') as f:
             json.dump(parsed, f, ensure_ascii=False, indent=2)
 
-        return redirect(url_for('admin_page', msg=f"अभिनंदन! '{final_name}' परीक्षा संच यशस्वीरित्या अपलोड झाला (एकूण प्रश्न: {len(parsed)}). आता विद्यार्थी थेट परीक्षा देऊ शकतात!"))
+        return redirect(url_for('admin_page', msg=f"अभिनंदन! '{final_name}' परीक्षा यशस्वीरित्या अपलोड झाली (एकूण प्रश्न: {len(parsed)})."))
     except Exception as e:
-        return redirect(url_for('admin_page', err=f"JSON फाईल वाचताना त्रुटी आली: {str(e)}"))
-
+        return redirect(url_for('admin_page', err=f"त्रुटी: {str(e)}"))
 
 # 2. PDF STUDY MATERIAL UPLOAD (Department-wise Mapping)
 @app.route('/admin/upload-material', methods=['POST'])
