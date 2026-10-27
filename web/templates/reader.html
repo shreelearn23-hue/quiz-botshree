@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>श्री लर्न - डिजिटल अभ्यास दालन व स्मार्ट व्याख्यान</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .tricolor-strip {
+            background: linear-gradient(90deg, #ff9933 33.33%, #ffffff 33.33%, #ffffff 66.66%, #138808 66.66%);
+            height: 3px;
+        }
+        /* Virtual Board Animation */
+        .board-glow {
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.4);
+        }
+        @keyframes avatarTalk {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(1.08) translateY(-2px); }
+        }
+        .avatar-speaking {
+            animation: avatarTalk 0.4s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col">
+
+    <!-- Top Tricolor Ribbon -->
+    <div class="tricolor-strip"></div>
+
+    <!-- Official Top Bar -->
+    <div class="bg-slate-900 text-slate-300 text-[11px] px-4 py-1.5 flex items-center justify-between border-b border-slate-800">
+        <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="font-medium">श्री लर्न • डिजिटल अभ्यास दालन व स्वयं-अध्ययन मंच</span>
+        </div>
+        <a href="/" class="text-slate-400 hover:text-white transition">
+            <i class="fa-solid fa-arrow-left mr-1"></i> मुख्य पृष्ठावर जा
+        </a>
+    </div>
+
+    <!-- STICKY SMART PLAYER CONTROL BAR (Step 2 Implementation) -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-md px-3 py-2.5">
+        <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-3">
+            
+            <!-- Topic Title Info -->
+            <div class="flex items-center gap-2.5 min-w-[200px]">
+                <div class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-sm">
+                    श्री
+                </div>
+                <div>
+                    <h1 id="docTitle" class="text-xs md:text-sm font-black text-slate-800 leading-tight">
+                        मराठी व्याकरण - वर्णमाला व संधी
+                    </h1>
+                    <span id="readingStatus" class="text-[10px] text-slate-500 font-medium">तयार • वाचनासाठी उपलब्ध</span>
+                </div>
+            </div>
+
+            <!-- SMART ACTION BUTTONS (Audio + Animated Hall + PDF Download) -->
+            <div class="flex items-center flex-wrap gap-2">
+                <!-- 1. Audio Track Controller -->
+                <div class="flex items-center bg-indigo-50 border border-indigo-200 rounded-xl p-1 gap-1">
+                    <button id="btnAudioPlay" onclick="toggleAudioSpeech()" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold transition flex items-center gap-1.5">
+                        <i id="audioIcon" class="fa-solid fa-headphones"></i>
+                        <span id="audioBtnText">ऑडिओ ऐका</span>
+                    </button>
+                    <button onclick="stopSpeech()" class="px-2 py-1.5 bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 rounded-lg text-xs transition" title="थांबवा">
+                        <i class="fa-solid fa-stop"></i>
+                    </button>
+                </div>
+
+                <!-- 2. Animated Virtual Lecture Hall Button -->
+                <button onclick="toggleLectureHall()" class="px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5">
+                    <i class="fa-solid fa-chalkboard-user"></i>
+                    <span>ॲनिमेशन व्याख्यान दालन</span>
+                </button>
+
+                <!-- 3. Direct PDF Download Button -->
+                <a id="btnDownloadPdf" href="#" download class="px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5">
+                    <i class="fa-solid fa-file-arrow-down"></i>
+                    <span>PDF डाऊनलोड करा</span>
+                </a>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- MAIN BODY CONTAINER -->
+    <main class="max-w-6xl mx-auto px-4 py-6 flex-1 w-full space-y-6">
+
+        <!-- ANIMATED VIRTUAL LECTURE HALL (Hidden by default, opens on button click) -->
+        <div id="lectureHallSection" class="hidden bg-slate-900 rounded-2xl p-4 md:p-6 text-white shadow-2xl border border-slate-800">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-red-500 animate-ping"></span>
+                    <h2 class="text-xs md:text-sm font-bold text-amber-400">लाईव्ह डिजिटल ॲनिमेशन व्याख्यान कक्ष</h2>
+                </div>
+                <button onclick="toggleLectureHall()" class="text-slate-400 hover:text-white text-sm">
+                    <i class="fa-solid fa-xmark"></i> बंद करा
+                </button>
+            </div>
+
+            <!-- Virtual Classroom Stage -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+                
+                <!-- Animated Teacher Avatar -->
+                <div class="md:col-span-3 flex flex-col items-center justify-center p-4 bg-slate-800/80 rounded-xl border border-slate-700 text-center">
+                    <div id="avatarGraphic" class="w-24 h-24 rounded-full bg-indigo-600 border-4 border-amber-400 flex items-center justify-center text-4xl shadow-lg mb-3">
+                        👨‍🏫
+                    </div>
+                    <div class="text-xs font-bold text-white">डिजिटल मार्गदर्शक</div>
+                    <div id="speakerBadge" class="text-[10px] text-slate-400 mt-1">उभारा व ऐका</div>
+                </div>
+
+                <!-- Interactive Smart Board -->
+                <div class="md:col-span-9 bg-slate-950 p-4 rounded-xl border border-slate-800 board-glow min-h-[160px] flex flex-col justify-center">
+                    <div class="text-[10px] uppercase font-bold text-indigo-400 tracking-wider mb-1">डिजिटल फलक (Smart Blackboard)</div>
+                    <p id="boardLiveText" class="text-sm md:text-base font-semibold text-amber-200 leading-relaxed">
+                        नमस्कार! वरील 'ऑडिओ ऐका' किंवा 'सुरू करा' बटनावर क्लिक करा. हा डिजिटल शिक्षक तुम्हाला संपूर्ण नोट्स वाचून समजावून सांगेल.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- STUDY NOTES & PDF TEXT CONTAINER (Step 3: Document Content) -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-6 md:p-8 shadow-sm">
+            
+            <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-5">
+                <span class="text-xs font-bold bg-amber-100 text-amber-800 px-3 py-1 rounded-full uppercase tracking-wider">
+                    अभ्यास साहित्य व अधिकृत नोट्स
+                </span>
+                <span class="text-xs text-slate-400 font-medium">
+                    <i class="fa-solid fa-eye mr-1"></i> थेट वाचन दालन
+                </span>
+            </div>
+
+            <!-- Readable Notes Text (Auto-Read by Voice Engine) -->
+            <article id="notesContent" class="text-sm md:text-base text-slate-700 leading-relaxed space-y-4">
+                <h2 class="text-base md:text-lg font-black text-slate-900 border-l-4 border-indigo-600 pl-3">
+                    १. मराठी भाषेची वर्णमाला व मूळाक्षरे
+                </h2>
+                <p>
+                    मराठी भाषेत एकूण ५२ वर्णांचा समावेश होतो. आपल्या तोंडावाटे निघणाऱ्या मूलध्वनींना 'वर्ण' असे म्हणतात. हे ध्वनी हवेत विरून जाऊ नयेत म्हणून आपण ते लिहून ठेवतो, म्हणून त्यांना 'अक्षर' असेही म्हणतात.
+                </p>
+                <p>
+                    वर्णांचे प्रामुख्याने तीन प्रकार पडतात: स्वर, स्वरादी आणि व्यंजने. ज्या वर्णाचा उच्चार स्वतंत्रपणे होतो, त्यांना स्वर म्हणतात. मराठीत एकूण १४ स्वर आहेत (अ, आ, इ, ई, उ, ऊ, ऋ, ऌ, ए, ऐ, ओ, औ, ॲ, ऑ).
+                </p>
+
+                <h2 class="text-base md:text-lg font-black text-slate-900 border-l-4 border-indigo-600 pl-3 pt-2">
+                    २. संधी व त्याचे मुख्य प्रकार
+                </h2>
+                <p>
+                    जवळजवळ आलेले दोन वर्ण एकमेकांमध्ये मिसळून त्यांचा एकच संयुक्त वर्ण तयार होण्याच्या प्रक्रियेला 'संधी' असे म्हणतात. संधीचे तीन प्रकार आहेत: स्वर संधी, व्यंजन संधी आणि विसर्ग संधी.
+                </p>
+                <p>
+                    परीक्षेच्या दृष्टीने संधीचे नियम अत्यंत महत्त्वाचे असून, वारंवार विचारले जाणारे प्रश्न या घटकावर आधारित असतात.
+                </p>
+            </article>
+
+            <!-- Bottom Practice CTA -->
+            <div class="mt-8 pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-50 p-4 rounded-xl">
+                <div>
+                    <h3 class="text-xs md:text-sm font-bold text-slate-800">हा धडा पूर्ण वाचून झाला का?</h3>
+                    <p class="text-[11px] text-slate-500">लगेच या विषयाची २५ प्रश्नांची CBT परीक्षा देऊन स्वतःचे मूल्यांकन करा.</p>
+                </div>
+                <a href="/exam" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-play"></i> CBT टेस्ट सुरू करा
+                </a>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- CLIENT-SIDE NATIVE SPEECH & ANIMATION ENGINE -->
+    <script>
+        let synth = window.speechSynthesis;
+        let isSpeaking = false;
+        let currentUtterance = null;
+
+        function toggleAudioSpeech() {
+            if (!synth) {
+                alert("तुमच्या ब्राऊझरमध्ये ऑडिओ वाचन सुविधा उपलब्ध नाही.");
+                return;
+            }
+
+            if (synth.speaking && !synth.paused) {
+                synth.pause();
+                updateAudioUI(false, "पुढे सुरू करा");
+                return;
+            }
+
+            if (synth.paused) {
+                synth.resume();
+                updateAudioUI(true, "ऑडिओ चालू आहे (Pause)");
+                return;
+            }
+
+            startNewSpeech();
+        }
+
+        function startNewSpeech() {
+            synth.cancel();
+
+            const textToRead = document.getElementById('notesContent').innerText;
+            currentUtterance = new SpeechSynthesisUtterance(textToRead);
+
+            // Marathi or Hindi voice detection
+            let voices = synth.getVoices();
+            let selectedVoice = voices.find(v => v.lang.includes('mr') || v.lang.includes('hi')) || voices[0];
+            if (selectedVoice) {
+                currentUtterance.voice = selectedVoice;
+            }
+
+            currentUtterance.rate = 0.95; // Clear natural reading speed
+            currentUtterance.pitch = 1.0;
+
+            currentUtterance.onstart = function() {
+                isSpeaking = true;
+                updateAudioUI(true, "थांबवा (Pause)");
+                document.getElementById('avatarGraphic').classList.add('avatar-speaking');
+                document.getElementById('speakerBadge').innerText = "शिकवत आहे...";
+                document.getElementById('readingStatus').innerText = "🔊 ऑडिओ वाचन सुरू आहे";
+            };
+
+            currentUtterance.onboundary = function(event) {
+                // Real-time synced text on the blackboard
+                const currentText = textToRead.substring(event.charIndex, event.charIndex + 90);
+                document.getElementById('boardLiveText').innerText = currentText + "...";
+            };
+
+            currentUtterance.onend = function() {
+                stopSpeech();
+                document.getElementById('boardLiveText').innerText = "व्याख्यान पूर्ण झाले आहे! आता खालील CBT टेस्ट सोडवा.";
+                document.getElementById('readingStatus').innerText = "पूर्ण झाले";
+            };
+
+            currentUtterance.onerror = function() {
+                stopSpeech();
+            };
+
+            synth.speak(currentUtterance);
+        }
+
+        function stopSpeech() {
+            if (synth) synth.cancel();
+            updateAudioUI(false, "ऑडिओ ऐका");
+            document.getElementById('avatarGraphic').classList.remove('avatar-speaking');
+            document.getElementById('speakerBadge').innerText = "तयार";
+            document.getElementById('readingStatus').innerText = "तयार";
+        }
+
+        function updateAudioUI(playing, btnText) {
+            document.getElementById('audioBtnText').innerText = btnText;
+            document.getElementById('audioIcon').className = playing ? "fa-solid fa-pause" : "fa-solid fa-headphones";
+        }
+
+        function toggleLectureHall() {
+            const hall = document.getElementById('lectureHallSection');
+            hall.classList.toggle('hidden');
+            if (!hall.classList.contains('hidden') && !synth.speaking) {
+                startNewSpeech();
+            }
+        }
+
+        // Voice pre-loader
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = () => synth.getVoices();
+        }
+    </script>
+
+</body>
+                      </html>
+                        
