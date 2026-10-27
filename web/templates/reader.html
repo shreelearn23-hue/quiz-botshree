@@ -3,293 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>श्री लर्न - डिजिटल ॲनिमेशन व्याख्यान दालन व स्मार्ट नोट्स</title>
+    <title>श्री लर्न - डिजिटल व्याख्यान कक्ष</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root {
-            --gov-teal: #085a6a;
-            --gov-teal-dark: #053c47;
-            --board-green: #11382b;
-        }
-        .bg-gov-teal { background-color: var(--gov-teal); }
-        .bg-board { background-color: var(--board-green); }
-        
-        /* Teacher Lip-Sync Mouth Animation */
-        @keyframes mouthTalk {
-            0%, 100% { transform: scaleY(0.2); }
-            50% { transform: scaleY(1.4); }
-        }
-        .mouth-moving {
-            animation: mouthTalk 0.22s infinite ease-in-out;
-            transform-origin: center;
-        }
-
-        /* Eye Blink Animation */
-        @keyframes eyeBlink {
-            0%, 90%, 100% { transform: scaleY(1); }
-            95% { transform: scaleY(0.1); }
-        }
-        .eyes-blinking {
-            animation: eyeBlink 3.5s infinite;
-            transform-origin: center;
-        }
-
-        /* Hand Pointing Gesture */
-        @keyframes handGesture {
+        /* Pointer Stick Animation */
+        @keyframes stickMove {
             0%, 100% { transform: rotate(0deg); }
-            50% { transform: rotate(-8deg) translateY(-4px); }
+            50% { transform: rotate(-12deg) translateY(-8px); }
         }
-        .hand-teaching {
-            animation: handGesture 1.8s infinite ease-in-out;
-            transform-origin: bottom right;
+        .stick-animating {
+            animation: stickMove 2s infinite ease-in-out;
+            transform-origin: 100px 180px;
         }
 
-        /* Fullscreen Classroom Overlay */
-        .fullscreen-hall {
-            position: fixed !important;
-            inset: 0 !important;
-            z-index: 9999 !important;
-            border-radius: 0 !important;
-            max-width: 100% !important;
-            height: 100vh !important;
+        /* Teacher Breathing / Teaching Sway */
+        @keyframes teacherSway {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+        .teacher-alive {
+            animation: teacherSway 2.5s infinite ease-in-out;
+        }
+
+        /* Marker Underline Glow */
+        .highlight-text {
+            background: linear-gradient(120deg, rgba(254, 240, 138, 0.7) 0%, rgba(254, 240, 138, 0.7) 100%);
+            background-repeat: no-repeat;
+            background-size: 100% 40%;
+            background-position: 0 88%;
         }
     </style>
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col">
 
-    <!-- Top Notice Strip -->
-    <div class="bg-slate-900 text-slate-300 text-[11px] px-4 py-1.5 flex items-center justify-between border-b border-slate-800">
-        <div class="flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span class="font-medium">श्री लर्न • डिजिटल ॲनिमेशन व्याख्यान व ई-लर्निंग दालन</span>
+    <!-- Top Utility Bar -->
+    <header class="bg-[#085a6a] text-white px-4 py-2.5 flex items-center justify-between shadow-sm sticky top-0 z-40">
+        <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg bg-white text-[#085a6a] flex items-center justify-center font-black text-sm">श्री</div>
+            <div>
+                <h1 class="text-xs md:text-sm font-bold">डिजिटल व्याख्यान कक्ष • थेट स्पष्टीकरण फलक</h1>
+            </div>
         </div>
-        <a href="/" class="text-slate-400 hover:text-white transition flex items-center gap-1">
-            <i class="fa-solid fa-arrow-left"></i> मुख्य पृष्ठावर जा
-        </a>
-    </div>
-
-    <!-- Sticky Smart Player Controller Bar (Audio + Hall + PDF) -->
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm px-3 md:px-6 py-2.5">
-        <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-3">
-            
-            <div class="flex items-center gap-2.5">
-                <div class="w-9 h-9 rounded-xl bg-gov-teal text-white flex items-center justify-center font-black text-sm">
-                    श्री
-                </div>
-                <div>
-                    <h1 id="activeTopicTitle" class="text-xs md:text-sm font-black text-slate-900 leading-tight">
-                        {{ topic if topic else "महाराष्ट्र स्पर्धा परीक्षा - स्मार्ट नोट्स व सराव" }}
-                    </h1>
-                    <span id="speechStateBadge" class="text-[10px] text-slate-500 font-medium">वाचनासाठी तयार</span>
-                </div>
-            </div>
-
-            <div class="flex items-center flex-wrap gap-2">
-                <!-- 1. Native Audio Track -->
-                <div class="flex items-center bg-teal-50 border border-teal-200 rounded-xl p-1 gap-1">
-                    <button id="btnAudioToggle" onclick="toggleSpeech()" class="px-3 py-1.5 bg-[#085a6a] hover:bg-slate-800 text-white rounded-lg text-xs font-bold transition flex items-center gap-1.5">
-                        <i id="audioPlayIcon" class="fa-solid fa-headphones"></i>
-                        <span id="audioBtnText">ऑडिओ ऐका</span>
-                    </button>
-                    <button onclick="stopAllSpeech()" class="px-2 py-1.5 bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 rounded-lg text-xs transition" title="थांबवा">
-                        <i class="fa-solid fa-stop"></i>
-                    </button>
-                </div>
-
-                <!-- 2. Fullscreen Animated Lecture Hall Launch -->
-                <button onclick="launchLectureHall()" class="px-3.5 py-2 bg-purple-700 hover:bg-purple-800 text-white rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5">
-                    <i class="fa-solid fa-chalkboard-user"></i>
-                    <span>ॲनिमेशन व्याख्यान दालन (Classroom)</span>
-                </button>
-
-                <!-- 3. Direct PDF Download Button -->
-                <button onclick="downloadAsPDF()" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5">
-                    <i class="fa-solid fa-file-arrow-down"></i>
-                    <span>PDF डाऊनलोड</span>
-                </button>
-            </div>
-
+        <div class="flex items-center gap-2">
+            <button onclick="toggleAudioLecture()" id="btnMasterPlay" class="px-3.5 py-1.5 bg-[#f28b20] hover:bg-amber-600 text-white font-bold rounded-lg text-xs shadow flex items-center gap-1.5 transition">
+                <i id="playIcon" class="fa-solid fa-play"></i>
+                <span id="playText">सुरू करा</span>
+            </button>
+            <a href="/" class="px-3 py-1.5 bg-slate-800 text-slate-200 hover:text-white rounded-lg text-xs transition">
+                बाहेर पडा
+            </a>
         </div>
     </header>
 
-    <!-- MAIN BODY -->
-    <main class="max-w-6xl mx-auto px-4 py-6 flex-1 w-full space-y-6">
+    <!-- CLASSROOM VIRTUAL STAGE (Photo Jaisa Exact Layout) -->
+    <main class="max-w-5xl mx-auto w-full p-3 md:p-6 flex-1 flex flex-col justify-center">
 
-        <!-- ANIMATED VIRTUAL CLASSROOM (Can expand to Full-Screen) -->
-        <div id="lectureHall" class="hidden bg-slate-950 rounded-2xl p-4 md:p-6 text-white shadow-2xl border-2 border-slate-800 transition-all duration-300">
+        <div class="bg-[#dcf0fa] rounded-3xl p-4 md:p-8 shadow-xl border-4 border-white relative overflow-hidden flex flex-col min-h-[480px] md:min-h-[540px]">
             
-            <!-- Classroom Header & Controls -->
-            <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
-                <div class="flex items-center gap-3">
-                    <span class="w-3 h-3 rounded-full bg-red-500 animate-ping"></span>
-                    <div>
-                        <h2 class="text-xs md:text-sm font-black text-amber-400">लाईव्ह डिजिटल ॲनिमेशन व्याख्यान कक्ष</h2>
-                        <span class="text-[10px] text-slate-400">मराठी उच्चार व डिजिटल फलक समक्रमित</span>
-                    </div>
-                </div>
+            <!-- Classroom Inner Stage Container -->
+            <div class="relative w-full flex-1 flex flex-col md:flex-row items-end justify-between">
 
-                <div class="flex items-center gap-2">
-                    <!-- Teacher Switch (Sir / Madam) -->
-                    <div class="flex bg-slate-900 border border-slate-700 rounded-lg p-0.5 text-[11px] font-bold">
-                        <button id="btnTeacherMale" onclick="switchTeacher('male')" class="px-2.5 py-1 rounded bg-indigo-600 text-white">
-                            👨‍🏫 शिक्षक (सर)
-                        </button>
-                        <button id="btnTeacherFemale" onclick="switchTeacher('female')" class="px-2.5 py-1 rounded text-slate-400 hover:text-white">
-                            👩‍🏫 शिक्षिका (मॅडम)
-                        </button>
-                    </div>
-
-                    <!-- Fullscreen Toggle -->
-                    <button onclick="toggleFullScreenHall()" class="p-2 bg-slate-800 hover:bg-slate-700 rounded-lg text-slate-300 text-xs" title="फुल स्क्रीन मोड">
-                        <i id="fsIcon" class="fa-solid fa-expand"></i>
-                    </button>
-
-                    <!-- Close -->
-                    <button onclick="closeLectureHall()" class="p-2 bg-slate-800 hover:bg-rose-900/60 rounded-lg text-slate-300 text-xs" title="बंद करा">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Virtual Stage: Animated Avatar + Smart Blackboard -->
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-5 items-center">
-                
-                <!-- ANIMATED TEACHER AVATAR (Interactive SVG) -->
-                <div class="md:col-span-4 flex flex-col items-center justify-center p-4 bg-slate-900/90 rounded-2xl border border-slate-800 text-center relative overflow-hidden">
+                <!-- 1. THE BIG WHITEBOARD (Left / Center) -->
+                <div class="w-full md:w-[72%] bg-white rounded-2xl border-8 border-slate-700 shadow-2xl p-5 md:p-6 mb-6 md:mb-12 relative min-h-[260px] md:min-h-[340px] flex flex-col justify-between">
                     
-                    <div class="w-40 h-52 relative flex items-center justify-center">
-                        <svg id="teacherSvg" class="w-full h-full drop-shadow-xl" viewBox="0 0 200 260" xmlns="http://www.w3.org/2000/svg">
-                            <!-- Body / Blazer -->
-                            <path id="svgBody" d="M 50,170 C 50,140 70,125 100,125 C 130,125 150,140 150,170 L 165,260 L 35,260 Z" fill="#1e293b"/>
-                            <!-- Shirt & Tie -->
-                            <polygon points="100,125 85,170 100,210 115,170" fill="#ffffff"/>
-                            <polygon id="svgTie" points="98,140 102,140 104,185 96,185" fill="#f59e0b"/>
+                    <!-- Whiteboard Top Mount Bar -->
+                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 w-48 h-3 bg-slate-800 rounded-full"></div>
 
-                            <!-- Hand Pointing towards Board -->
-                            <g class="hand-teaching">
-                                <path d="M 150,165 Q 185,150 195,120" stroke="#f1c27d" stroke-width="12" stroke-linecap="round" fill="none"/>
-                                <circle cx="195" cy="118" r="6" fill="#f1c27d"/>
-                            </g>
-
-                            <!-- Neck -->
-                            <rect x="90" y="105" width="20" height="25" fill="#e0ac69" rx="3"/>
-
-                            <!-- Head -->
-                            <ellipse cx="100" cy="75" rx="36" ry="42" fill="#f1c27d"/>
-
-                            <!-- Hair (Changes based on Male / Female) -->
-                            <path id="svgHair" d="M 64,70 C 60,35 90,25 100,25 C 115,25 140,35 136,70 C 130,42 110,40 100,40 C 85,40 70,45 64,70 Z" fill="#1f2937"/>
-
-                            <!-- Glasses -->
-                            <rect x="74" y="65" width="20" height="14" rx="3" fill="none" stroke="#334155" stroke-width="2.5"/>
-                            <rect x="106" y="65" width="20" height="14" rx="3" fill="none" stroke="#334155" stroke-width="2.5"/>
-                            <line x1="94" y1="72" x2="106" y2="72" stroke="#334155" stroke-width="2.5"/>
-
-                            <!-- Eyes (Blinking Group) -->
-                            <g class="eyes-blinking">
-                                <circle cx="84" cy="72" r="3" fill="#0f172a"/>
-                                <circle cx="116" cy="72" r="3" fill="#0f172a"/>
-                            </g>
-
-                            <!-- Nose -->
-                            <path d="M 100,75 L 97,85 L 103,85" stroke="#d49755" stroke-width="2" fill="none" stroke-linecap="round"/>
-
-                            <!-- Mouth (Speaking Lip-Sync Element) -->
-                            <ellipse id="svgMouth" cx="100" cy="98" rx="8" ry="2.5" fill="#881337"/>
-                        </svg>
-                    </div>
-
-                    <div id="teacherNameTag" class="text-xs font-bold text-amber-300 mt-2">प्राध्यापक (मार्गदर्शक सर)</div>
-                    <div id="avatarSpeakingStatus" class="text-[10px] text-slate-400">ऐकण्यासाठी सज्ज</div>
-                </div>
-
-                <!-- SMART DIGITAL BLACKBOARD -->
-                <div class="md:col-span-8 bg-board p-5 md:p-6 rounded-2xl border-4 border-amber-900 shadow-2xl min-h-[220px] flex flex-col justify-between relative">
-                    <div class="flex items-center justify-between border-b border-emerald-800/80 pb-2 mb-3">
-                        <span class="text-[11px] font-bold text-amber-300 tracking-wider flex items-center gap-1.5">
-                            <i class="fa-solid fa-chalkboard"></i> डिजिटल अभ्यास फलक (Smart Blackboard)
+                    <!-- Header On Board -->
+                    <div class="border-b-2 border-slate-200 pb-2 flex items-center justify-between text-xs text-slate-500">
+                        <span class="font-bold text-[#085a6a] flex items-center gap-1.5">
+                            <i class="fa-solid fa-graduation-cap"></i> संकल्पना स्पष्टीकरण (Concept Class)
                         </span>
-                        <span class="text-[10px] text-emerald-300">महाराष्ट्र राज्य अभ्यासक्रम</span>
+                        <span id="liveStatusBadge" class="bg-amber-100 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded">वाचनासाठी सज्ज</span>
                     </div>
 
-                    <div class="my-auto py-2">
-                        <p id="boardLiveSpeech" class="text-sm md:text-lg font-bold text-emerald-100 leading-relaxed tracking-wide">
-                            "नमस्कार विद्यार्थी मित्रांनो! खालील अभ्यास घटक काळजीपूर्वक ऐका आणि समजून घ्या. मी तुम्हाला प्रत्येक मुद्दा वाचून समजावून सांगणार आहे."
-                        </p>
+                    <!-- Live Content Area On Board -->
+                    <div class="my-auto py-3">
+                        <div id="boardTitle" class="text-sm md:text-base font-black text-slate-900 mb-2">
+                            विषय: मराठी व्याकरण - संधी व प्रकार
+                        </div>
+                        <div id="boardText" class="text-xs md:text-sm text-slate-700 font-medium leading-relaxed">
+                            "संधी म्हणजे दोन वर्णांचे एकत्रीकरण होय. जेव्हा दोन जवळजवळ आलेले वर्ण एकत्र मिसळतात, तेव्हा तयार होणाऱ्या नव्या रचनेला संधी म्हणतात. उदाहरणार्थ: विद्या + अर्थी = विद्यार्थी (दीर्घत्व स्वरसंधी)."
+                        </div>
                     </div>
 
-                    <div class="pt-3 border-t border-emerald-800/80 flex items-center justify-between text-[11px] text-emerald-300">
-                        <span id="speechTimerStatus"><i class="fa-solid fa-circle-play mr-1"></i> सुरू करण्यासाठी 'ऑडिओ ऐका' दाबा</span>
-                        <button onclick="toggleSpeech()" class="px-3 py-1 bg-amber-500 hover:bg-amber-600 text-slate-900 font-extrabold rounded-lg shadow transition">
-                            <i class="fa-solid fa-play mr-1"></i> आताच सुरू करा
-                        </button>
+                    <!-- Bottom Question Pallet Hint On Board -->
+                    <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+                        <span id="highlightSentence" class="text-[#085a6a] font-bold">शिक्षक समजावून सांगत आहेत...</span>
+                        <span class="text-slate-400">श्री लर्न डिजिटल बोर्ड</span>
                     </div>
                 </div>
 
-            </div>
-
-        </div>
-
-        <!-- MAIN STUDY MATERIAL TEXT (Auto-Read by Avatar Engine) -->
-        <div id="printArea" class="bg-white rounded-2xl border border-slate-200 p-6 md:p-8 shadow-sm">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-5">
-                <span class="text-xs font-bold bg-teal-50 text-gov-teal border border-teal-200 px-3 py-1 rounded-full uppercase tracking-wider">
-                    अधिकृत हस्तलिखित नोट्स व मार्गदर्शन
-                </span>
-                <span class="text-xs text-slate-400 font-medium">
-                    <i class="fa-solid fa-file-lines mr-1"></i> संपूर्ण अभ्यासक्रम घटक
-                </span>
-            </div>
-
-            <!-- Notes Article -->
-            <article id="notesReadableText" class="text-sm md:text-base text-slate-700 leading-relaxed space-y-5">
-                
-                <h2 class="text-base md:text-lg font-black text-slate-900 border-l-4 border-[#085a6a] pl-3">
-                    घटक १: मराठी व्याकरण - मूळाक्षरे व वर्ण विचार
-                </h2>
-                <p>
-                    आपल्या तोंडावाटे निघणाऱ्या मूलध्वनींना 'वर्ण' असे म्हणतात. हे ध्वनी हवेत नष्ट होऊ नयेत म्हणून आपण ते विशिष्ट चिन्हांनी लिहून ठेवतो, म्हणून त्यांना 'अक्षर' (ज्याचा क्षय होत नाही ते) असे म्हटले जाते. मराठी भाषेत आधुनिक वर्णमालेनुसार एकूण ५२ वर्णांचा समावेश होतो.
-                </p>
-                <p>
-                    वर्णांचे मुख्य तीन प्रकार मानले जातात: स्वर, स्वरादी आणि व्यंजने. ज्या वर्णांचा उच्चार करताना मुखातील अवयवांचा एकमेकांशी अडथळा न होता स्वतंत्रपणे होतो, त्यांना स्वर म्हणतात. मराठीत एकूण १४ स्वर (अ, आ, इ, ई, उ, ऊ, ऋ, ऌ, ए, ऐ, ओ, औ, ॲ, ऑ) समाविष्ट आहेत.
-                </p>
-
-                <h2 class="text-base md:text-lg font-black text-slate-900 border-l-4 border-[#085a6a] pl-3 pt-2">
-                    घटक २: संधी व त्याचे नियम
-                </h2>
-                <p>
-                    संधी म्हणजे सांधणे किंवा जोडणे. जवळजवळ आलेले दोन वर्ण एकमेकांत मिसळून एकच संयुक्त वर्ण तयार होण्याच्या प्रक्रियेला संधी म्हणतात. परीक्षेमध्ये वारंवार स्वरसंधी, व्यंजनसंधी आणि विसर्गसंधी यावर आधारित प्रश्न विचारले जातात.
-                </p>
-                <p>
-                    उदाहरणादाखल: 'विद्या + अर्थी = विद्यार्थी' ही दीर्घत्व स्वरसंधी आहे. तर 'सत् + जन = सज्जन' ही व्यंजन संधीचे उत्तम उदाहरण आहे. या सर्व नियमांची वारंवार उजळणी केल्यास परीक्षेत पैकीच्या पैकी गुण मिळवणे सहज शक्य होते.
-                </p>
-
-            </article>
-
-            <!-- Bottom Practice Test Callout -->
-            <div class="mt-8 pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-50 p-4 rounded-xl">
-                <div>
-                    <h3 class="text-xs md:text-sm font-bold text-slate-800">हा घटक वाचून व ऐकून झाला का?</h3>
-                    <p class="text-[11px] text-slate-500">लगेच या विषयाची ऑनलाइन CBT परीक्षा देऊन स्वतःचे गुण तपासा.</p>
+                <!-- 2. TEACHER PODIUM / DESK (Bottom Left of Board) -->
+                <div class="hidden md:block absolute left-4 bottom-0 w-44 z-20">
+                    <div class="h-4 bg-slate-400 rounded-t-sm shadow"></div>
+                    <div class="h-28 bg-[#3b82f6] border-t-2 border-slate-600 flex items-center justify-center text-white/30 text-xs font-black">
+                        श्री लर्न
+                    </div>
                 </div>
-                <a href="/exam" class="bg-gov-teal hover:bg-slate-900 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow transition flex items-center gap-2">
-                    <i class="fa-solid fa-play"></i> थेट CBT टेस्ट सुरू करा
-                </a>
+
+                <!-- 3. REAL ANIMATED TEACHER AVATAR (Right Side with Pointer Stick) -->
+                <div class="w-full md:w-[28%] flex justify-center md:justify-end z-10 teacher-alive">
+                    
+                    <svg class="w-48 md:w-60 h-auto drop-shadow-2xl" viewBox="0 0 240 400" xmlns="http://www.w3.org/2000/svg">
+                        
+                        <!-- Teacher Body (Pink Dress / Saree look as in reference) -->
+                        <!-- Legs -->
+                        <rect x="98" y="270" width="12" height="85" fill="#fbcfe8" rx="6"/>
+                        <rect x="122" y="270" width="12" height="85" fill="#fbcfe8" rx="6"/>
+                        <!-- Shoes (Red High Heels) -->
+                        <polygon points="94,355 112,355 116,365 88,365" fill="#e11d48"/>
+                        <polygon points="120,355 138,355 142,365 114,365" fill="#e11d48"/>
+
+                        <!-- Dress / Body (Back-facing towards board, stylish angle) -->
+                        <path d="M 90,170 C 85,210 80,240 82,275 L 150,275 C 152,240 148,210 142,170 Z" fill="#fb7185"/>
+                        <path d="M 96,160 C 90,185 88,210 89,240 L 143,240 C 144,210 142,185 136,160 Z" fill="#f43f5e"/>
+
+                        <!-- Left Arm (Resting) -->
+                        <path d="M 140,165 Q 148,205 145,245" stroke="#fbcfe8" stroke-width="12" stroke-linecap="round" fill="none"/>
+
+                        <!-- Head & Hair (Brown Elegant Hair) -->
+                        <circle cx="116" cy="130" r="24" fill="#6d4c41"/>
+                        <path d="M 98,125 C 92,165 95,190 125,190 C 145,190 148,165 144,125 C 142,105 130,95 116,95 C 102,95 99,105 98,125 Z" fill="#5d4037"/>
+
+                        <!-- RIGHT ARM WITH POINTER STICK (Pointing directly to Whiteboard) -->
+                        <g id="pointerGroup" class="stick-animating">
+                            <!-- Arm reaching up toward board -->
+                            <path d="M 100,165 Q 75,145 60,135" stroke="#fbcfe8" stroke-width="12" stroke-linecap="round" fill="none"/>
+                            <!-- Hand -->
+                            <circle cx="58" cy="133" r="6" fill="#fbcfe8"/>
+                            <!-- Pointer Stick (Long black teaching pointer reaching whiteboard) -->
+                            <line x1="60" y1="135" x2="-20" y2="70" stroke="#1e293b" stroke-width="4" stroke-linecap="round"/>
+                            <circle cx="-20" cy="70" r="3.5" fill="#e11d48"/>
+                        </g>
+
+                    </svg>
+                </div>
+
             </div>
 
         </div>
 
     </main>
 
-    <!-- Native Speech Synthesis & 2D Avatar Animation Script -->
+    <!-- Native Speech Synthesis Sync Script -->
     <script>
         let synth = window.speechSynthesis;
-        let isSpeaking = false;
-        let activeTeacher = 'male';
-        let currentUtterance = null;
+        let isPlaying = false;
+        let utterance = null;
 
-        function toggleSpeech() {
+        function toggleAudioLecture() {
             if (!synth) {
                 alert("तुमच्या ब्राऊझरमध्ये ऑडिओ सुविधा उपलब्ध नाही.");
                 return;
@@ -297,144 +161,72 @@
 
             if (synth.speaking && !synth.paused) {
                 synth.pause();
-                setUIState(false, "पुढे सुरू करा");
+                setUIPlaying(false, "पुढे सुरू करा");
                 return;
             }
 
             if (synth.paused) {
                 synth.resume();
-                setUIState(true, "ऑडिओ चालू आहे (Pause)");
+                setUIPlaying(true, "थांबवा (Pause)");
                 return;
             }
 
-            startNewLecture();
+            startLecture();
         }
 
-        function startNewLecture() {
+        function startLecture() {
             synth.cancel();
 
-            const fullText = document.getElementById('notesReadableText').innerText;
-            currentUtterance = new SpeechSynthesisUtterance(fullText);
+            const textToExplain = document.getElementById('boardText').innerText;
+            utterance = new SpeechSynthesisUtterance(textToExplain);
 
-            // Select Marathi or Hindi Voice
+            // Marathi or Hindi native voice
             let voices = synth.getVoices();
             let voice = voices.find(v => v.lang.includes('mr') || v.lang.includes('hi')) || voices[0];
-            if (voice) currentUtterance.voice = voice;
+            if (voice) utterance.voice = voice;
 
-            currentUtterance.rate = 0.95;
-            currentUtterance.pitch = (activeTeacher === 'female') ? 1.2 : 1.0;
+            utterance.rate = 0.95;
+            utterance.pitch = 1.15; // Natural clear female pitch
 
-            currentUtterance.onstart = function() {
-                isSpeaking = true;
-                setUIState(true, "थांबवा (Pause)");
-                startAvatarTalking(true);
+            utterance.onstart = function() {
+                isPlaying = true;
+                setUIPlaying(true, "थांबवा (Pause)");
+                document.getElementById('pointerGroup').classList.add('stick-animating');
+                document.getElementById('liveStatusBadge').innerText = "🔊 शिक्षिका शिकवत आहेत";
+                document.getElementById('liveStatusBadge').className = "bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded animate-pulse";
             };
 
-            currentUtterance.onboundary = function(event) {
-                // Synchronize sentence onto the blackboard
-                const chunk = fullText.substring(event.charIndex, event.charIndex + 95);
-                document.getElementById('boardLiveSpeech').innerText = `"${chunk}..."`;
+            utterance.onboundary = function(e) {
+                const currentChunk = textToExplain.substring(e.charIndex, e.charIndex + 60);
+                document.getElementById('highlightSentence').innerHTML = `पॉइंटर: <span class="highlight-text font-bold text-slate-900">${currentChunk}...</span>`;
             };
 
-            currentUtterance.onend = function() {
-                stopAllSpeech();
-                document.getElementById('boardLiveSpeech').innerText = "व्याख्यान यशस्वीरित्या पूर्ण झाले आहे! आता खालील CBT परीक्षा सोडवा.";
+            utterance.onend = function() {
+                stopLecture();
+                document.getElementById('highlightSentence').innerText = "व्याख्यान पूर्ण झाले आहे! आता पुढील प्रश्न सोडवा.";
             };
 
-            currentUtterance.onerror = function() {
-                stopAllSpeech();
+            utterance.onerror = function() {
+                stopLecture();
             };
 
-            synth.speak(currentUtterance);
+            synth.speak(utterance);
         }
 
-        function stopAllSpeech() {
+        function stopLecture() {
             if (synth) synth.cancel();
-            isSpeaking = false;
-            setUIState(false, "ऑडिओ ऐका");
-            startAvatarTalking(false);
-            document.getElementById('speechStateBadge').innerText = "तयार";
+            isPlaying = false;
+            setUIPlaying(false, "सुरू करा");
+            document.getElementById('pointerGroup').classList.remove('stick-animating');
+            document.getElementById('liveStatusBadge').innerText = "सज्ज";
+            document.getElementById('liveStatusBadge').className = "bg-amber-100 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded";
         }
 
-        function setUIState(playing, btnText) {
-            document.getElementById('audioBtnText').innerText = btnText;
-            document.getElementById('audioPlayIcon').className = playing ? "fa-solid fa-pause" : "fa-solid fa-headphones";
-            document.getElementById('speechStateBadge').innerText = playing ? "🔊 ऑडिओ व व्याख्यान चालू आहे" : "थांबवले आहे";
+        function setUIPlaying(playing, text) {
+            document.getElementById('playText').innerText = text;
+            document.getElementById('playIcon').className = playing ? "fa-solid fa-pause" : "fa-solid fa-play";
         }
 
-        function startAvatarTalking(talking) {
-            const mouth = document.getElementById('svgMouth');
-            const status = document.getElementById('avatarSpeakingStatus');
-
-            if (talking) {
-                mouth.classList.add('mouth-moving');
-                status.innerText = "शिकवत आहे...";
-                status.className = "text-[10px] text-amber-300 font-bold";
-            } else {
-                mouth.classList.remove('mouth-moving');
-                status.innerText = "सज्ज";
-                status.className = "text-[10px] text-slate-400";
-            }
-        }
-
-        function switchTeacher(gender) {
-            activeTeacher = gender;
-            const btnMale = document.getElementById('btnTeacherMale');
-            const btnFemale = document.getElementById('btnTeacherFemale');
-            const hair = document.getElementById('svgHair');
-            const body = document.getElementById('svgBody');
-            const nameTag = document.getElementById('teacherNameTag');
-
-            if (gender === 'female') {
-                btnFemale.className = "px-2.5 py-1 rounded bg-purple-600 text-white";
-                btnMale.className = "px-2.5 py-1 rounded text-slate-400 hover:text-white";
-                hair.setAttribute('d', "M 55,85 C 50,30 90,20 100,20 C 115,20 150,30 145,85 C 150,110 145,150 142,160 C 135,130 135,50 100,50 C 65,50 65,130 58,160 Z");
-                body.setAttribute('fill', "#701a75");
-                nameTag.innerText = "प्राध्यापिका (मार्गदर्शक मॅडम)";
-            } else {
-                btnMale.className = "px-2.5 py-1 rounded bg-indigo-600 text-white";
-                btnFemale.className = "px-2.5 py-1 rounded text-slate-400 hover:text-white";
-                hair.setAttribute('d', "M 64,70 C 60,35 90,25 100,25 C 115,25 140,35 136,70 C 130,42 110,40 100,40 C 85,40 70,45 64,70 Z");
-                body.setAttribute('fill', "#1e293b");
-                nameTag.innerText = "प्राध्यापक (मार्गदर्शक सर)";
-            }
-
-            if (isSpeaking) {
-                startNewLecture();
-            }
-        }
-
-        function launchLectureHall() {
-            const hall = document.getElementById('lectureHall');
-            hall.classList.remove('hidden');
-            hall.scrollIntoView({ behavior: 'smooth' });
-            if (!isSpeaking) {
-                startNewLecture();
-            }
-        }
-
-        function closeLectureHall() {
-            document.getElementById('lectureHall').classList.add('hidden');
-            stopAllSpeech();
-        }
-
-        function toggleFullScreenHall() {
-            const hall = document.getElementById('lectureHall');
-            const fsIcon = document.getElementById('fsIcon');
-            hall.classList.toggle('fullscreen-hall');
-            
-            if (hall.classList.contains('fullscreen-hall')) {
-                fsIcon.className = "fa-solid fa-compress";
-            } else {
-                fsIcon.className = "fa-solid fa-expand";
-            }
-        }
-
-        function downloadAsPDF() {
-            window.print();
-        }
-
-        // Voice pre-loader
         if (speechSynthesis.onvoiceschanged !== undefined) {
             speechSynthesis.onvoiceschanged = () => synth.getVoices();
         }
