@@ -124,6 +124,7 @@ def admin_upload_json():
     except Exception as e:
         return redirect(url_for('admin_page', err=f"त्रुटी: {str(e)}"))
 
+
 # 2. PDF STUDY MATERIAL UPLOAD (Department-wise Mapping)
 @app.route('/admin/upload-material', methods=['POST'])
 def admin_upload_material():
