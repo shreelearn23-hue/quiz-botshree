@@ -2,35 +2,38 @@ import os
 import json
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from werkzeug.utils import secure_filename
+import google.generativeai as genai
 
 app = Flask(__name__)
 
-# Base directories configuration
+# Base directories setup
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 DATA_DIR = os.path.join(BASE_DIR, 'data')
 UPLOAD_NOTES_DIR = os.path.join(os.path.dirname(__file__), 'static', 'notes')
 UPLOAD_AUDIO_DIR = os.path.join(os.path.dirname(__file__), 'static', 'audio')
 MEDIA_REGISTRY_FILE = os.path.join(DATA_DIR, 'media_registry.json')
 
-# Folders create karein agar na hon
 os.makedirs(DATA_DIR, exist_ok=True)
 os.makedirs(UPLOAD_NOTES_DIR, exist_ok=True)
 os.makedirs(UPLOAD_AUDIO_DIR, exist_ok=True)
 
 app.config['UPLOAD_NOTES_DIR'] = UPLOAD_NOTES_DIR
 app.config['UPLOAD_AUDIO_DIR'] = UPLOAD_AUDIO_DIR
-app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024  # Max 50MB file size
+app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024  # Max 50MB
 
-# 🔐 ADMIN SECRET PASSWORD (Aap ise environment variable se ya yahan se badal sakte hain)
+# 🔐 ADMIN SECRET PASSWORD
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "shree123")
+
+# 🤖 BOT WALI GEMINI API CONFIGURATION
+GEMINI_KEY = os.getenv("GEMINI_API_KEY") or os.getenv("GEMINI_KEY") or ""
+if GEMINI_KEY:
+    genai.configure(api_key=GEMINI_KEY)
 
 
 def get_stats():
-    """Count uploaded exams, pdfs, audio, videos for dashboard"""
     json_count = len([f for f in os.listdir(DATA_DIR) if f.endswith('.json') and f != 'media_registry.json'])
     pdf_count = len([f for f in os.listdir(UPLOAD_NOTES_DIR) if f.endswith('.pdf')])
     audio_count = len([f for f in os.listdir(UPLOAD_AUDIO_DIR) if f.lower().endswith(('.mp3', '.m4a', '.wav'))])
-    
     video_count = 0
     if os.path.exists(MEDIA_REGISTRY_FILE):
         try:
@@ -49,31 +52,69 @@ def get_stats():
 
 
 # -------------------------------------------------------------
-# 🌐 PUBLIC PAGES (Home, Exam & Smart Voice/Animation Reader)
+# 🌐 PUBLIC ROUTES
 # -------------------------------------------------------------
 
 @app.route('/')
 def home():
-    """Main Home Page"""
     return render_template('index.html')
 
 
 @app.route('/exam')
 def exam():
-    """CBT Exam Hall"""
     return render_template('exam.html')
 
 
 @app.route('/read')
 def read_material():
-    """Smart Document Reader with Auto-Voice, Animation Hall & PDF Download"""
-    topic = request.args.get('topic', 'मराठी व्याकरण - वर्णमाला व संधी')
-    pdf_file = request.args.get('file', '')
-    return render_template('reader.html', topic=topic, pdf_file=pdf_file)
+    topic = request.args.get('topic', 'मराठी व्याकरण - संधी व प्रकार')
+    return render_template('reader.html', topic=topic)
 
 
 # -------------------------------------------------------------
-# 🛠️ MASTER ADMIN CONTROL PANEL
+# 🤖 GEMINI AI REAL-TIME EXPLANATION ENGINE
+# -------------------------------------------------------------
+
+@app.route('/api/ai-explain', methods=['POST'])
+def ai_explain():
+    payload = request.get_json(silent=True) or {}
+    topic = payload.get('topic', 'स्पर्धा परीक्षा घटक')
+    content = payload.get('content', '')
+
+    if not GEMINI_KEY:
+        return jsonify({
+            "status": "success",
+            "source": "fallback",
+            "explanation": f"विषय: {topic}\n\nसंधी म्हणजे दोन वर्णांचे एकत्रीकरण होय. जेव्हा दोन जवळजवळ आलेले वर्ण एकत्र मिसळतात, तेव्हा तयार होणाऱ्या नव्या रचनेला संधी म्हणतात. उदा. विद्या + अर्थी = विद्यार्थी. परीक्षेत यावर २ ते ३ गुण हमखास विचारले जातात."
+        })
+
+    try:
+        model = genai.GenerativeModel('gemini-2.5-flash')
+        prompt = (
+            f"तुम्ही महाराष्ट्र स्पर्धा परीक्षांचे (पोलीस भरती, तलाठी, MPSC) तज्ज्ञ प्राध्यापक आहात. "
+            f"खालील विषयावर विद्यार्थ्यांसाठी अत्यंत सोप्या, रंजक आणि आत्मविश्वास वाढवणाऱ्या मराठीत 'थेट व्याख्यान' तयार करा. "
+            f"महत्वाचे मुद्दे, शॉर्टकट ट्रिक्स आणि १-२ उदाहरणे द्या.\n\n"
+            f"विषय: {topic}\n"
+            f"संदर्भ माहिती: {content}\n\n"
+            f"कृपया थेट शिक्षकासारखे बोलण्याच्या भाषेत लिहा (उदा. 'नमस्कार मित्रांनो, आज आपण...')."
+        )
+        response = model.generate_content(prompt)
+        text = response.text if response else "व्याख्यान तयार करताना त्रुटी आली."
+
+        return jsonify({
+            "status": "success",
+            "source": "gemini",
+            "explanation": text
+        })
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
+
+
+# -------------------------------------------------------------
+# 🛠️ ADMIN PANEL ROUTES
 # -------------------------------------------------------------
 
 @app.route('/admin', methods=['GET'])
@@ -83,7 +124,6 @@ def admin_page():
     return render_template('admin.html', message=message, error=error, stats=get_stats())
 
 
-# 1. DIRECT JSON EXAM PAPER UPLOAD (100 Questions / PYQs)
 @app.route('/admin/upload-json-exam', methods=['POST'])
 def admin_upload_json():
     admin_key = request.form.get('admin_key', '').strip()
@@ -107,7 +147,6 @@ def admin_upload_json():
         content = file.read().decode('utf-8')
         parsed = json.loads(content)
 
-        # Smart format converter: agar dictionary ho toh questions nikaal lo
         if isinstance(parsed, dict):
             for key in ['questions', 'quiz', 'data', 'mcqs']:
                 if key in parsed and isinstance(parsed[key], list):
@@ -125,7 +164,6 @@ def admin_upload_json():
         return redirect(url_for('admin_page', err=f"त्रुटी: {str(e)}"))
 
 
-# 2. PDF STUDY MATERIAL UPLOAD (Department-wise Mapping)
 @app.route('/admin/upload-material', methods=['POST'])
 def admin_upload_material():
     admin_key = request.form.get('admin_key', '').strip()
@@ -166,10 +204,9 @@ def admin_upload_material():
     with open(MEDIA_REGISTRY_FILE, 'w', encoding='utf-8') as f:
         json.dump(registry, f, ensure_ascii=False, indent=2)
 
-    return redirect(url_for('admin_page', msg=f"'{title or filename}' PDF यशस्वीरित्या अपलोड होऊन {dept} विभागात जोडली गेली!"))
+    return redirect(url_for('admin_page', msg=f"'{title or filename}' PDF यशस्वीरित्या अपलोड झाली!"))
 
 
-# 3. AUDIO / VIDEO MEDIA LECTURE HANDLER
 @app.route('/admin/add-media', methods=['POST'])
 def admin_add_media():
     admin_key = request.form.get('admin_key', '').strip()
@@ -190,20 +227,16 @@ def admin_add_media():
             pass
 
     if media_type == 'video':
-        if not video_url:
-            return redirect(url_for('admin_page', err="कृपया व्हिडिओ लिंक (URL) टाका."))
         registry.setdefault('videos', []).append({
             "subject": subject,
             "title": title,
             "url": video_url
         })
-        msg = f"व्हिडिओ व्याख्यान '{title}' यशस्वीरित्या जोडले गेले!"
+        msg = f"व्हिडिओ व्याख्यान '{title}' जोडले गेले!"
     else:
         if 'audio_file' not in request.files:
             return redirect(url_for('admin_page', err="कोणतीही ऑडिओ फाईल निवडलेली नाही."))
         file = request.files['audio_file']
-        if file.filename == '':
-            return redirect(url_for('admin_page', err="कृपया .mp3 फाईल निवडा."))
         filename = secure_filename(file.filename)
         save_path = os.path.join(app.config['UPLOAD_AUDIO_DIR'], filename)
         file.save(save_path)
@@ -213,7 +246,7 @@ def admin_add_media():
             "filename": filename,
             "url": f"/static/audio/{filename}"
         })
-        msg = f"ऑडिओ फाईल '{title or filename}' यशस्वीरित्या अपलोड झाली!"
+        msg = f"ऑडिओ फाईल '{title or filename}' अपलोड झाली!"
 
     with open(MEDIA_REGISTRY_FILE, 'w', encoding='utf-8') as f:
         json.dump(registry, f, ensure_ascii=False, indent=2)
@@ -222,7 +255,7 @@ def admin_add_media():
 
 
 # -------------------------------------------------------------
-# ⚡ CBT EXAM API ENDPOINTS (Frontend JS Integration)
+# ⚡ CBT EXAM API ENDPOINTS
 # -------------------------------------------------------------
 
 @app.route('/api/list-quizzes', methods=['GET'])
