@@ -2,10 +2,16 @@ import os
 import json
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from werkzeug.utils import secure_filename
-import google.generativeai as genai
+
+# Safe Import for Gemini (Taaki app kabhi crash na ho)
+try:
+    import google.generativeai as genai
+    HAS_GENAI = True
+except ImportError:
+    genai = None
+    HAS_GENAI = False
 
 app = Flask(__name__)
-
 # Base directories setup
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 DATA_DIR = os.path.join(BASE_DIR, 'data')
